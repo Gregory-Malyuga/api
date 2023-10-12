@@ -4,9 +4,26 @@ type User {
   password: String!
 }
 
+type UsersList {
+  items: [User!]!
+  total: Int!
+}
+
+input Filter {
+  ids: [Int!]
+  username: String
+  password: String
+  search: String
+}
+
+input Range {
+  begin: Int!
+  end: Int!
+}
+
 type Query {
-  userFindOne(id: Int!): User
-  userFindManyAndCount(): [User!]!
+  user(id: Int!): User
+  users(filter: Filter, range: Range): UsersList!
 }
 
 input UserInputCreate {

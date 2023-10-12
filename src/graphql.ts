@@ -8,6 +8,18 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export interface Filter {
+    ids?: Nullable<number[]>;
+    username?: Nullable<string>;
+    password?: Nullable<string>;
+    search?: Nullable<string>;
+}
+
+export interface Range {
+    begin: number;
+    end: number;
+}
+
 export interface UserInputCreate {
     username: string;
     password: string;
@@ -25,8 +37,14 @@ export interface User {
     password: string;
 }
 
+export interface UsersList {
+    items: User[];
+    total: number;
+}
+
 export interface IQuery {
-    userFindOne(id: number): Nullable<User> | Promise<Nullable<User>>;
+    user(id: number): Nullable<User> | Promise<Nullable<User>>;
+    users(filter?: Nullable<Filter>, range?: Nullable<Range>): UsersList | Promise<UsersList>;
 }
 
 export interface IMutation {
