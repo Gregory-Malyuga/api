@@ -1,0 +1,26 @@
+type User {
+  id: Int!
+  username: String!
+  password: String!
+}
+
+type Query {
+  userFindOne(id: Int!): User
+  userFindManyAndCount(): [User!]!
+}
+
+input UserInputCreate {
+  username: String!
+  password: String!
+}
+
+input UserInputUpdate {
+  id: Int!
+  username: String
+  password: String
+}
+
+type Mutation {
+  userCreate(dto: UserInputCreate): User
+  userUpdate(dto: UserInputUpdate): User
+}
