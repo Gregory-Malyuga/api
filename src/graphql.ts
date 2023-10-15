@@ -25,7 +25,6 @@ export interface UserInputCreate {
 }
 
 export interface UserInputUpdate {
-    id: number;
     username?: Nullable<string>;
     password?: Nullable<string>;
 }
@@ -42,13 +41,14 @@ export interface UserIndex {
 }
 
 export interface IQuery {
-    user(id: number): Nullable<User> | Promise<Nullable<User>>;
+    user(filter: Filter): Nullable<User> | Promise<Nullable<User>>;
     users(filter?: Nullable<Filter>, pagination?: Nullable<Pagination>): UserIndex | Promise<UserIndex>;
 }
 
 export interface IMutation {
-    userCreate(dto?: Nullable<UserInputCreate>): Nullable<User> | Promise<Nullable<User>>;
-    userUpdate(dto?: Nullable<UserInputUpdate>): Nullable<User> | Promise<Nullable<User>>;
+    userCreate(dto: UserInputCreate): Nullable<User> | Promise<Nullable<User>>;
+    userUpdate(dto: UserInputUpdate, filter: Filter): Nullable<User> | Promise<Nullable<User>>;
+    userDelete(filter: Filter): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 type Nullable<T> = T | null;

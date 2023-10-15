@@ -21,7 +21,7 @@ type UserIndex {
 }
 
 type Query {
-  user(id: Int!): User
+  user(filter: Filter!): User
   users(filter: Filter, pagination: Pagination): UserIndex!
 }
 
@@ -31,12 +31,12 @@ input UserInputCreate {
 }
 
 input UserInputUpdate {
-  id: Int!
   username: String
   password: String
 }
 
 type Mutation {
-  userCreate(dto: UserInputCreate): User
-  userUpdate(dto: UserInputUpdate): User
+  userCreate(dto: UserInputCreate!): User
+  userUpdate(dto: UserInputUpdate!, filter: Filter!): User
+  userDelete(filter: Filter!): Boolean
 }

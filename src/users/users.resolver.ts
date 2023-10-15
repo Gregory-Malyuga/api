@@ -7,15 +7,13 @@ import { UserUpdateDto } from './dto/users.update-dto';
 import { User } from './users.entity';
 import { UsersService } from './users.service';
 
-export type UserSortableColumns = 'id' | 'username' | 'password';
-
 @Resolver('User')
 export class UsersResolver {
   constructor(private readonly service: UsersService) {}
 
   @Query('user')
-  async findOne(@Args('id') id: number): Promise<User> {
-    return await this.service.findOne(id);
+  async findOne(@Args('filter') filter: UserFilterDto): Promise<User> {
+    return await this.service.findOne(filter);
   }
 
   @Query('users')
@@ -34,7 +32,15 @@ export class UsersResolver {
   }
 
   @Mutation('userUpdate')
-  async update(@Args('dto') dto: UserUpdateDto): Promise<User> {
-    return await this.service.update(dto);
+  async update(
+    @Args('dto') dto: UserUpdateDto,
+    @Args('filter') filter: UserFilterDto,
+  ): Promise<User> {
+    return await this.service.update(dto, filter);
+  }
+
+  @Mutation('userDelete')
+  async delete(@Args('filter') filter: UserFilterDto): Promise<boolean> {
+    return await this.service.delete(filter);
   }
 }
