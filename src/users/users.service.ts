@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AbstractService } from 'src/common/services/abstract.service';
+import { genSalt, hash } from 'bcrypt';
+import { AbstractService } from 'common/services/abstract.service';
 import { Repository } from 'typeorm';
 import { UserCreateDto } from './dto/users.create-dto';
 import { UserFilterDto } from './dto/users.filter-dto';
@@ -17,16 +18,17 @@ export class UsersService extends AbstractService<User> {
   }
 
   async create(dto: UserCreateDto): Promise<User> {
-    // TODO заменить на генерацию через jwt service
-
-    // так же нужно хранить не сам пароль а хэшированный пароль
-    return await this.repository.save({ ...dto, ...{ salt: 'test' } });
+    const salt = await genSalt();
+    dto.password = await hash(dto.password, salt);
+    return await this.repository.save({ ...dto, ...{ salt: salt } });
   }
 
   async update(dto: UserUpdateDto, filter: UserFilterDto): Promise<User> {
-    // Если придет пароль - надо перегенерить соль и захэшировать пароль + соль к себе
-    return await this.findOne(filter).then((user) =>
-      this.repository.save({ ...user, ...dto }),
-    );
+    return await this.findOne(filter).then(async (user) => {
+      if (dto.password !== undefined) {
+        dto.password = await hash(dto.password, user.salt);
+      }
+      return this.repository.save({ ...user, ...dto });
+    });
   }
 }

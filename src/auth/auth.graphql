@@ -1,0 +1,7 @@
+type Token {
+  access_token: String!
+}
+
+type Query {
+  singIn(username: String!, password: String!): Token
+}
