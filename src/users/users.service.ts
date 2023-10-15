@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AbstractRangeDto } from 'src/common/dto/abstract.range-dto';
-import { Repository } from 'typeorm';
+import { Pagination } from 'src/common/dto/pagination.dto';
+import { In, JsonContains, Repository } from 'typeorm';
 import { UserCreateDto } from './dto/users.create-dto';
-import { UserIndexDto } from './dto/users.index-dto';
+import { UserFilterDto } from './dto/users.filter-dto';
 import { UserUpdateDto } from './dto/users.update-dto';
 import { User } from './users.entity';
 
@@ -18,25 +18,37 @@ export class UsersService {
     return await this.repository.findOneOrFail({ where: { id: id } });
   }
 
-  async findManyAndCount(
-    filter: UserIndexDto,
-    range: AbstractRangeDto,
+  async findAndCount(
+    filter: UserFilterDto,
+    pagination: Pagination,
   ): Promise<[User[], number]> {
     return await this.repository.findAndCount({
-      where: filter,
-      skip: range.skip,
-      take: range.take,
+      where: this.processFilter(filter),
+      skip: pagination.offset,
+      take: pagination.limit,
     });
   }
 
-  // TODO: дописать обработку фильтров чтобы работало с whereIn / JsonContains
-  // async processFilter(filter: UserIndexDto): Promise<Object> {
-  //   for (let key in filter) {
-  //   }
-  // }
+  processFilter(filter: UserFilterDto): object {
+    const where = {};
+    this.repository.metadata.columns.map((column) => {
+      if (filter[column.propertyName]) {
+        where[column.propertyName] = filter[column.propertyName];
+        if (column.type === 'json') {
+          filter[column.propertyName] = JsonContains(
+            where[column.propertyName],
+          );
+        } else if (Array.isArray(filter[column.propertyName])) {
+          where[column.propertyName] = In(filter[column.propertyName]);
+        }
+      }
+    });
+    return where;
+  }
 
   async create(dto: UserCreateDto): Promise<User> {
     // TODO заменить на генерацию через jwt service
+
     // так же нужно хранить не сам пароль а хэшированный пароль
     return await this.repository.save({ ...dto, ...{ salt: 'test' } });
   }

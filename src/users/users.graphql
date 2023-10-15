@@ -4,26 +4,25 @@ type User {
   password: String!
 }
 
-type UsersList {
+input Filter {
+  id: [Int!]
+  username: String
+  password: String
+}
+
+input Pagination {
+  offset: Int
+  limit: Int
+}
+
+type UserIndex {
   items: [User!]!
   total: Int!
 }
 
-input Filter {
-  ids: [Int!]
-  username: String
-  password: String
-  search: String
-}
-
-input Range {
-  begin: Int!
-  end: Int!
-}
-
 type Query {
   user(id: Int!): User
-  users(filter: Filter, range: Range): UsersList!
+  users(filter: Filter, pagination: Pagination): UserIndex!
 }
 
 input UserInputCreate {

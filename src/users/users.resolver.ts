@@ -1,11 +1,13 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AbstractRangeDto } from 'src/common/dto/abstract.range-dto';
-import { AbstractIndexResourceDto } from '../common/resources/abstract.index-resource-dto';
+import { AbstractListDto } from 'src/common/dto/abstract.list-dto';
+import { Pagination } from 'src/common/dto/pagination.dto';
 import { UserCreateDto } from './dto/users.create-dto';
+import { UserFilterDto } from './dto/users.filter-dto';
 import { UserUpdateDto } from './dto/users.update-dto';
 import { User } from './users.entity';
 import { UsersService } from './users.service';
-import { UserIndexDto } from './dto/users.index-dto';
+
+export type UserSortableColumns = 'id' | 'username' | 'password';
 
 @Resolver('User')
 export class UsersResolver {
@@ -17,12 +19,12 @@ export class UsersResolver {
   }
 
   @Query('users')
-  async findManyAndCount(
-    @Args('filter') filter: UserIndexDto,
-    @Args('range') range: AbstractRangeDto,
-  ): Promise<AbstractIndexResourceDto<User>> {
-    return new AbstractIndexResourceDto(
-      await this.service.findManyAndCount(filter, range),
+  async findAndCount(
+    @Args('filter') filter: UserFilterDto,
+    @Args('pagination') pagination: Pagination,
+  ): Promise<AbstractListDto<User>> {
+    return new AbstractListDto<User>(
+      await this.service.findAndCount(filter, pagination),
     );
   }
 

@@ -9,15 +9,14 @@
 /* eslint-disable */
 
 export interface Filter {
-    ids?: Nullable<number[]>;
+    id?: Nullable<number[]>;
     username?: Nullable<string>;
     password?: Nullable<string>;
-    search?: Nullable<string>;
 }
 
-export interface Range {
-    begin: number;
-    end: number;
+export interface Pagination {
+    offset?: Nullable<number>;
+    limit?: Nullable<number>;
 }
 
 export interface UserInputCreate {
@@ -37,14 +36,14 @@ export interface User {
     password: string;
 }
 
-export interface UsersList {
+export interface UserIndex {
     items: User[];
     total: number;
 }
 
 export interface IQuery {
     user(id: number): Nullable<User> | Promise<Nullable<User>>;
-    users(filter?: Nullable<Filter>, range?: Nullable<Range>): UsersList | Promise<UsersList>;
+    users(filter?: Nullable<Filter>, pagination?: Nullable<Pagination>): UserIndex | Promise<UserIndex>;
 }
 
 export interface IMutation {
