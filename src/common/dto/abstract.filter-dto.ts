@@ -1,5 +1,5 @@
 export class AbstractFilterDto {
-  id?: [number];
+  id?: [number] | number;
   createdAt?: number;
   updatedAt?: number;
 }

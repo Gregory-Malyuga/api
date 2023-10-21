@@ -1,15 +1,16 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { hash } from 'bcrypt';
-import { Repository } from 'typeorm';
 import { AppModule } from '../app.module';
-import { User } from './users.entity';
+import { UserFactory } from './factories/users.factory';
+import { UserRepository } from './users.repository';
 import { UsersResolver } from './users.resolver';
 
 describe('UsersResolver', () => {
   let app: INestApplication;
   let resolver: UsersResolver;
-  let repository: Repository<User>;
+  let repository: UserRepository;
+  let factory: UserFactory;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -18,7 +19,8 @@ describe('UsersResolver', () => {
 
     app = module.createNestApplication();
     resolver = module.get<UsersResolver>(UsersResolver);
-    repository = module.;
+    repository = module.get<UserRepository>(UserRepository);
+    factory = module.get<UserFactory>(UserFactory);
 
     await repository
       .find()
@@ -31,13 +33,55 @@ describe('UsersResolver', () => {
     expect(resolver).toBeDefined();
   });
 
-  test('create user', async () => {
+  it('create', async () => {
     await resolver
       .create({ username: 'username', password: 'password' })
-      .then((user) => {
-        expect(user.username).toBe('1username');
-        expect(user.password).toBe(hash('password', user.salt));
+      .then(async (user) => {
+        expect(user.username).toBe('username');
+        expect(user.password).toBe(await hash('password', user.salt));
       });
+  });
+
+  it('update', async () => {
+    await factory
+      .create()
+      .then(
+        async (user) =>
+          await resolver.update(
+            {
+              ...user,
+              ...{ username: 'new username', password: 'new password' },
+            },
+            { id: user.id },
+          ),
+      )
+      .then(async (user) => {
+        expect(user.username).toBe('new username');
+        expect(user.password).toBe(await hash('new password', user.salt));
+      });
+  });
+
+  it('delete', async () => {
+    await factory.create().then(async (user) => {
+      await resolver
+        .delete({ id: user.id })
+        .then((deleteResult) => expect(deleteResult).toBe(true));
+      await repository
+        .findOne({
+          where: {
+            id: user.id,
+          },
+        })
+        .then((result) => expect(result).toBe(null));
+    });
+  });
+
+  it('show', async () => {
+    await factory.create({ username: 'admin' }).then(async (user) => {
+      await resolver
+        .findOne({ id: user.id })
+        .then((user) => expect(user.username).toBe('admin'));
+    });
   });
 
   afterAll(() => app.close());
