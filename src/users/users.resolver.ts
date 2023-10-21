@@ -1,11 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AbstractListDto } from 'common/dto/abstract.list-dto';
-import { Pagination } from 'common/dto/pagination.dto';
+import { AbstractListDto } from 'src/common/dto/abstract.list-dto';
 import { UserCreateDto } from './dto/users.create-dto';
 import { UserFilterDto } from './dto/users.filter-dto';
 import { UserUpdateDto } from './dto/users.update-dto';
 import { User } from './users.entity';
 import { UsersService } from './users.service';
+import { Pagination } from 'src/common/dto/pagination.dto';
 
 @Resolver('User')
 export class UsersResolver {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { genSalt, hash } from 'bcrypt';
-import { AbstractService } from 'common/services/abstract.service';
+import { AbstractService } from 'src/common/services/abstract.service';
 import { Repository } from 'typeorm';
 import { UserCreateDto } from './dto/users.create-dto';
 import { UserFilterDto } from './dto/users.filter-dto';

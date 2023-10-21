@@ -1,4 +1,4 @@
-import { AbstractFilterDto } from 'common/dto/abstract.filter-dto';
+import { AbstractFilterDto } from 'src/common/dto/abstract.filter-dto';
 
 export class UserFilterDto extends AbstractFilterDto {
   username?: string;

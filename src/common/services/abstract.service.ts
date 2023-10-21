@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Pagination } from 'common/dto/pagination.dto';
+import { Pagination } from '../dto/pagination.dto';
 import { In, JsonContains, Repository } from 'typeorm';
 import { AbstractFilterDto } from '../dto/abstract.filter-dto';
 
