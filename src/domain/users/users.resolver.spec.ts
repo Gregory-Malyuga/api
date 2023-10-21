@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { hash } from 'bcrypt';
-import { AppModule } from '../app.module';
+import { AppModule } from 'src/app.module';
 import { UserFactory } from './factories/users.factory';
 import { UserRepository } from './users.repository';
 import { UsersResolver } from './users.resolver';

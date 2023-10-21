@@ -5,9 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { User } from './users/users.entity';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from './domain/auth/auth.module';
+import { Chat } from './domain/chats/chat/chat.entity';
+import { ChatsModule } from './domain/chats/chat/chat.module';
+import { User } from './domain/users/users.entity';
+import { UsersModule } from './domain/users/users.module';
 
 @Module({
   imports: [
@@ -18,7 +20,7 @@ import { UsersModule } from './users/users.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, Chat],
       synchronize: true,
       autoLoadEntities: true,
     }),
@@ -31,6 +33,7 @@ import { UsersModule } from './users/users.module';
     }),
     UsersModule,
     AuthModule,
+    ChatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
