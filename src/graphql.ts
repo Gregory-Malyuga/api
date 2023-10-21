@@ -10,7 +10,7 @@
 
 export interface Filter {
     id?: Nullable<number[]>;
-    username?: Nullable<string>;
+    login?: Nullable<string>;
     password?: Nullable<string>;
 }
 
@@ -20,12 +20,12 @@ export interface Pagination {
 }
 
 export interface UserInputCreate {
-    username: string;
+    login: string;
     password: string;
 }
 
 export interface UserInputUpdate {
-    username?: Nullable<string>;
+    login?: Nullable<string>;
     password?: Nullable<string>;
 }
 
@@ -34,14 +34,14 @@ export interface Token {
 }
 
 export interface IQuery {
-    singIn(username: string, password: string): Nullable<Token> | Promise<Nullable<Token>>;
+    singIn(login: string, password: string): Nullable<Token> | Promise<Nullable<Token>>;
     user(filter: Filter): Nullable<User> | Promise<Nullable<User>>;
     users(filter?: Nullable<Filter>, pagination?: Nullable<Pagination>): UserIndex | Promise<UserIndex>;
 }
 
 export interface User {
     id: number;
-    username: string;
+    login: string;
 }
 
 export interface UserIndex {

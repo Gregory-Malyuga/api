@@ -9,7 +9,7 @@ export class UserFactory {
 
   async create(dto?: object): Promise<User> {
     return await this.service.create({
-      username: faker.string.sample({ min: 1, max: 255 }),
+      login: faker.string.sample({ min: 1, max: 255 }),
       password: faker.string.sample({ min: 1, max: 255 }),
       ...dto,
     });

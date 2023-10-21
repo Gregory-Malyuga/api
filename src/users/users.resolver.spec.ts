@@ -35,9 +35,9 @@ describe('UsersResolver', () => {
 
   it('create', async () => {
     await resolver
-      .create({ username: 'username', password: 'password' })
+      .create({ login: 'login', password: 'password' })
       .then(async (user) => {
-        expect(user.username).toBe('username');
+        expect(user.login).toBe('login');
         expect(user.password).toBe(await hash('password', user.salt));
       });
   });
@@ -50,13 +50,13 @@ describe('UsersResolver', () => {
           await resolver.update(
             {
               ...user,
-              ...{ username: 'new username', password: 'new password' },
+              ...{ login: 'new login', password: 'new password' },
             },
             { id: user.id },
           ),
       )
       .then(async (user) => {
-        expect(user.username).toBe('new username');
+        expect(user.login).toBe('new login');
         expect(user.password).toBe(await hash('new password', user.salt));
       });
   });
@@ -77,10 +77,10 @@ describe('UsersResolver', () => {
   });
 
   it('show', async () => {
-    await factory.create({ username: 'admin' }).then(async (user) => {
+    await factory.create({ login: 'admin' }).then(async (user) => {
       await resolver
         .findOne({ id: user.id })
-        .then((user) => expect(user.username).toBe('admin'));
+        .then((user) => expect(user.login).toBe('admin'));
     });
   });
 

@@ -7,9 +7,9 @@ export class AuthResolver {
 
   @Query('singIn')
   async singIn(
-    @Args('username') username: string,
+    @Args('login') login: string,
     @Args('password') password: string,
   ) {
-    return this.authService.signIn(username, password);
+    return this.authService.signIn(login, password);
   }
 }

@@ -1,11 +1,11 @@
 type User {
   id: Int!
-  username: String!
+  login: String!
 }
 
 input Filter {
   id: [Int!]
-  username: String
+  login: String
   password: String
 }
 
@@ -25,12 +25,12 @@ type Query {
 }
 
 input UserInputCreate {
-  username: String!
+  login: String!
   password: String!
 }
 
 input UserInputUpdate {
-  username: String
+  login: String
   password: String
 }
 

@@ -3,5 +3,5 @@ type Token {
 }
 
 type Query {
-  singIn(username: String!, password: String!): Token
+  singIn(login: String!, password: String!): Token
 }
