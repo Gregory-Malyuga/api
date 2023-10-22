@@ -1,10 +1,12 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthGuard } from './domain/auth/auth.guards';
 import { AuthModule } from './domain/auth/auth.module';
 import { Chat } from './domain/chats/chat/chat.entity';
 import { ChatsModule } from './domain/chats/chat/chat.module';
@@ -36,6 +38,12 @@ import { UsersModule } from './domain/users/users.module';
     ChatsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
