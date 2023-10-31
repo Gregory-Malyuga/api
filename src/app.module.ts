@@ -8,12 +8,14 @@ import * as redisStore from 'cache-manager-redis-store';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserArea } from './domain/areas/user/user.entity';
+import { UserAreaModule } from './domain/areas/user/user.module';
 import { AuthGuard } from './domain/auth/auth.guards';
 import { AuthModule } from './domain/auth/auth.module';
-import { Chat } from './domain/chats/chat/chat.entity';
-import { ChatModule } from './domain/chats/chat/chat.module';
 import { User } from './domain/users/users.entity';
 import { UsersModule } from './domain/users/users.module';
+import { Area } from './domain/areas/area/area.entity';
+import { AreaModule } from './domain/areas/area/area.module';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { UsersModule } from './domain/users/users.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Chat],
+      entities: [User, Area, UserArea],
       synchronize: true,
       autoLoadEntities: true,
     }),
@@ -43,7 +45,8 @@ import { UsersModule } from './domain/users/users.module';
     }),
     UsersModule,
     AuthModule,
-    ChatModule,
+    AreaModule,
+    UserAreaModule,
   ],
   controllers: [AppController],
   providers: [

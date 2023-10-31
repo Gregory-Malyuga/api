@@ -10,10 +10,13 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('chats')
-export class Chat extends BaseEntity {
+@Entity('areas')
+export class Area extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({ name: 'creator_id' })
+  creatorId: number;
 
   @Index()
   @Column()

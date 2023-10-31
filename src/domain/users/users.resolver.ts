@@ -9,6 +9,7 @@ import { UserUpdateDto } from './dto/users.update-dto';
 import { User } from './users.entity';
 import { UsersService } from './users.service';
 
+// TOOD: Добавить гварды
 @Resolver('User')
 export class UsersResolver {
   constructor(private readonly service: UsersService) {}
@@ -36,23 +37,31 @@ export class UsersResolver {
 
   @Mutation('userUpdate')
   async update(
-    @Auth() user: number,
+    @Auth() auth: number,
     @Args('dto') dto: UserUpdateDto,
-    @Args('id') id: number,
+    @Args('filter') filter: UserFilterDto,
   ): Promise<User> {
-    this.canActivate(user, id);
-    return await this.service.update(dto, id);
+    this.canActivate(auth, filter);
+    return await this.service.update(dto, filter);
   }
 
   @Mutation('userDelete')
-  async delete(@Auth() user: number, @Args('id') id: number): Promise<boolean> {
-    this.canActivate(user, id);
-    return await this.service.delete(id);
+  async delete(
+    @Auth() auth: number,
+    @Args('filter') filter: UserFilterDto,
+  ): Promise<boolean> {
+    this.canActivate(auth, filter);
+    return await this.service.delete(filter);
   }
 
-  private canActivate(user: number, id: number): void {
-    if (user !== id) {
-      throw new UnauthorizedException();
-    }
+  private async canActivate(
+    auth: number,
+    filter: UserFilterDto,
+  ): Promise<void> {
+    await this.service.findOne(filter).then((user) => {
+      if (user.id !== auth) {
+        throw new UnauthorizedException();
+      }
+    });
   }
 }

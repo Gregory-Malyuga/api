@@ -45,15 +45,15 @@ export class AbstractService<Entity> {
     return await this.repository.save(dto);
   }
 
-  async update(dto: any, id: number): Promise<Entity> {
-    return await this.findOne({ id: id }).then((model) =>
+  async update(dto: any, filter: AbstractFilterDto): Promise<Entity> {
+    return await this.findOne(filter).then((model) =>
       this.repository.save({ ...model, ...dto }),
     );
   }
 
-  async delete(id: number): Promise<boolean> {
-    await this.findOne({ id: id }).then((model) =>
-      this.repository.remove(model),
+  async delete(filter: AbstractFilterDto): Promise<boolean> {
+    await this.findOne(filter).then((model) =>
+      this.repository.softRemove(model),
     );
     return true;
   }

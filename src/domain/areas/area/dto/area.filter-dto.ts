@@ -1,8 +1,9 @@
 import { Max, Min } from 'class-validator';
 import { AbstractFilterDto } from 'src/common/dto/abstract.filter-dto';
 
-export class ChatFilterDto extends AbstractFilterDto {
+export class AreaFilterDto extends AbstractFilterDto {
   @Min(3)
   @Max(255)
   name?: string;
+  id?: number;
 }

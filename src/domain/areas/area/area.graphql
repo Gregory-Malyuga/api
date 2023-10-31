@@ -1,0 +1,42 @@
+type Area {
+  id: Int!
+  name: String!
+  description: String!
+}
+
+input Filter {
+  id: [Int!]
+  name: String
+  description: String
+}
+
+input Pagination {
+  offset: Int
+  limit: Int
+}
+
+type AreaIndex {
+  items: [Area!]!
+  total: Int!
+}
+
+type Query {
+  area(filter: Filter!): Area
+  areas(filter: Filter, pagination: Pagination): AreaIndex!
+}
+
+input AreaInputCreate {
+  name: String!
+  description: String!
+}
+
+input AreaInputUpdate {
+  name: String
+  description: String
+}
+
+type Mutation {
+  areaCreate(dto: AreaInputCreate!): Area
+  areaUpdate(dto: AreaInputUpdate!, filter: Filter!): Area
+  areaDelete(filter: Filter!): Boolean
+}
