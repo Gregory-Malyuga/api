@@ -11,7 +11,7 @@ import { AppService } from './app.service';
 import { AuthGuard } from './domain/auth/auth.guards';
 import { AuthModule } from './domain/auth/auth.module';
 import { Chat } from './domain/chats/chat/chat.entity';
-import { ChatsModule } from './domain/chats/chat/chat.module';
+import { ChatModule } from './domain/chats/chat/chat.module';
 import { User } from './domain/users/users.entity';
 import { UsersModule } from './domain/users/users.module';
 
@@ -43,7 +43,7 @@ import { UsersModule } from './domain/users/users.module';
     }),
     UsersModule,
     AuthModule,
-    ChatsModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [

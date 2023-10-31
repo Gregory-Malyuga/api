@@ -1,18 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ChatsService } from './chat.service';
+import { ChatService } from './chat.service';
+import { AppModule } from 'src/app.module';
+import { INestApplication } from '@nestjs/common';
 
 describe('ChatsService', () => {
-  let service: ChatsService;
+  let app: INestApplication;
+  let service: ChatService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ChatsService],
+      imports: [AppModule],
     }).compile();
 
-    service = module.get<ChatsService>(ChatsService);
+    app = module.createNestApplication();
+    service = module.get<ChatService>(ChatService);
+
+    app.init();
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  afterAll(() => app.close);
 });

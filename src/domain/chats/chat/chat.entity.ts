@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   Timestamp,
   UpdateDateColumn,
@@ -14,14 +15,12 @@ export class Chat extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  ownerId: number;
-
+  @Index()
   @Column()
   name!: string;
 
-  @Column()
-  description!: string;
+  @Column({ nullable: true, length: 2000 })
+  description?: string;
 
   @CreateDateColumn()
   createdAt!: Timestamp;

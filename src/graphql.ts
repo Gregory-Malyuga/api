@@ -10,6 +10,8 @@
 
 export interface Filter {
     id?: Nullable<number[]>;
+    name?: Nullable<string>;
+    description?: Nullable<string>;
     login?: Nullable<string>;
     password?: Nullable<string>;
 }
@@ -17,6 +19,16 @@ export interface Filter {
 export interface Pagination {
     offset?: Nullable<number>;
     limit?: Nullable<number>;
+}
+
+export interface ChatInputCreate {
+    name: string;
+    description: string;
+}
+
+export interface ChatInputUpdate {
+    name?: Nullable<string>;
+    description?: Nullable<string>;
 }
 
 export interface UserInputCreate {
@@ -35,8 +47,30 @@ export interface Token {
 
 export interface IQuery {
     singIn(login: string, password: string): Nullable<Token> | Promise<Nullable<Token>>;
+    chat(filter: Filter): Nullable<Chat> | Promise<Nullable<Chat>>;
+    chats(filter?: Nullable<Filter>, pagination?: Nullable<Pagination>): ChatIndex | Promise<ChatIndex>;
     user(filter: Filter): Nullable<User> | Promise<Nullable<User>>;
     users(filter?: Nullable<Filter>, pagination?: Nullable<Pagination>): UserIndex | Promise<UserIndex>;
+}
+
+export interface Chat {
+    id: number;
+    name: string;
+    description: string;
+}
+
+export interface ChatIndex {
+    items: Chat[];
+    total: number;
+}
+
+export interface IMutation {
+    chatCreate(dto: ChatInputCreate): Nullable<Chat> | Promise<Nullable<Chat>>;
+    chatUpdate(dto: ChatInputUpdate, id: number): Nullable<Chat> | Promise<Nullable<Chat>>;
+    chatDelete(id: number): Nullable<boolean> | Promise<Nullable<boolean>>;
+    userCreate(dto: UserInputCreate): Nullable<User> | Promise<Nullable<User>>;
+    userUpdate(dto: UserInputUpdate, id: number): Nullable<User> | Promise<Nullable<User>>;
+    userDelete(id: number): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export interface User {
@@ -47,12 +81,6 @@ export interface User {
 export interface UserIndex {
     items: User[];
     total: number;
-}
-
-export interface IMutation {
-    userCreate(dto: UserInputCreate): Nullable<User> | Promise<Nullable<User>>;
-    userUpdate(dto: UserInputUpdate, id: number): Nullable<User> | Promise<Nullable<User>>;
-    userDelete(id: number): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 type Nullable<T> = T | null;
