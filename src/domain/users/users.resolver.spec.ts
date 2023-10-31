@@ -48,11 +48,12 @@ describe('UsersResolver', () => {
       .then(
         async (user) =>
           await resolver.update(
+            user.id,
             {
               ...user,
               ...{ login: 'new login', password: 'new password' },
             },
-            { id: user.id },
+            user.id,
           ),
       )
       .then(async (user) => {
@@ -64,7 +65,7 @@ describe('UsersResolver', () => {
   it('delete', async () => {
     await factory.create().then(async (user) => {
       await resolver
-        .delete({ id: user.id })
+        .delete(user.id, user.id)
         .then((deleteResult) => expect(deleteResult).toBe(true));
       await repository
         .findOne({

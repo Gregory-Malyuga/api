@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Pagination } from '../dto/pagination.dto';
 import { In, JsonContains, Repository } from 'typeorm';
 import { AbstractFilterDto } from '../dto/abstract.filter-dto';
+import { Pagination } from '../dto/pagination.dto';
 
 @Injectable()
 export class AbstractService<Entity> {
@@ -45,14 +45,16 @@ export class AbstractService<Entity> {
     return await this.repository.save(dto);
   }
 
-  async update(dto: any, filter: AbstractFilterDto): Promise<Entity> {
-    return await this.findOne(filter).then((model) =>
+  async update(dto: any, id: number): Promise<Entity> {
+    return await this.findOne({ id: id }).then((model) =>
       this.repository.save({ ...model, ...dto }),
     );
   }
 
-  async delete(filter: AbstractFilterDto): Promise<boolean> {
-    await this.findOne(filter).then((model) => this.repository.remove(model));
+  async delete(id: number): Promise<boolean> {
+    await this.findOne({ id: id }).then((model) =>
+      this.repository.remove(model),
+    );
     return true;
   }
 }

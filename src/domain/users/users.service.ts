@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { genSalt, hash } from 'bcrypt';
 import { AbstractService } from 'src/common/services/abstract.service';
 import { UserCreateDto } from './dto/users.create-dto';
-import { UserFilterDto } from './dto/users.filter-dto';
 import { UserUpdateDto } from './dto/users.update-dto';
 import { User } from './users.entity';
 import { UserRepository } from './users.repository';
@@ -22,8 +21,8 @@ export class UsersService extends AbstractService<User> {
     });
   }
 
-  async update(dto: UserUpdateDto, filter: UserFilterDto): Promise<User> {
-    return await this.findOne(filter).then(async (user) => {
+  async update(dto: UserUpdateDto, id: number): Promise<User> {
+    return await this.findOne({ id: id }).then(async (user) => {
       if (dto.password !== undefined) {
         dto.password = await hash(dto.password, user.salt);
       }

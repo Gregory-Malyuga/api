@@ -36,6 +36,6 @@ input UserInputUpdate {
 
 type Mutation {
   userCreate(dto: UserInputCreate!): User
-  userUpdate(dto: UserInputUpdate!, filter: Filter!): User
-  userDelete(filter: Filter!): Boolean
+  userUpdate(dto: UserInputUpdate!, id: Int!): User
+  userDelete(id: Int!): Boolean
 }

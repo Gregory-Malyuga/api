@@ -51,8 +51,8 @@ export interface UserIndex {
 
 export interface IMutation {
     userCreate(dto: UserInputCreate): Nullable<User> | Promise<Nullable<User>>;
-    userUpdate(dto: UserInputUpdate, filter: Filter): Nullable<User> | Promise<Nullable<User>>;
-    userDelete(filter: Filter): Nullable<boolean> | Promise<Nullable<boolean>>;
+    userUpdate(dto: UserInputUpdate, id: number): Nullable<User> | Promise<Nullable<User>>;
+    userDelete(id: number): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 type Nullable<T> = T | null;

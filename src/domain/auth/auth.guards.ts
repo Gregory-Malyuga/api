@@ -6,6 +6,7 @@ import {
   Injectable,
   SetMetadata,
   UnauthorizedException,
+  createParamDecorator,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
@@ -13,6 +14,11 @@ import { Cache } from 'cache-manager';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+
+export const Auth = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) =>
+    GqlExecutionContext.create(ctx).getContext().req.user,
+);
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -26,23 +32,20 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (isPublic) {
-      return true;
-    }
-    try {
-      this.extractTokenFromHeader(context);
-    } catch {
-      throw new UnauthorizedException();
-    }
-    return true;
+    return isPublic || this.extractTokenFromHeader(context);
   }
 
   private async extractTokenFromHeader(context: ExecutionContext) {
-    const gqlContext = GqlExecutionContext.create(context);
-    const request = gqlContext.getContext().req;
-    const authorization = request.get('Authorization');
-    const token = authorization.replace('Bearer ', '');
-    const payload: { id: number } = await this.cacheManager.get(token);
-    request['user'] = payload.id;
+    try {
+      const gqlContext = GqlExecutionContext.create(context);
+      const request = gqlContext.getContext().req;
+      const authorization = request.get('Authorization');
+      const token = authorization.replace('Bearer ', '');
+      const payload: { id: number } = await this.cacheManager.get(token);
+      request['user'] = payload.id;
+      return true;
+    } catch {
+      throw new UnauthorizedException();
+    }
   }
 }

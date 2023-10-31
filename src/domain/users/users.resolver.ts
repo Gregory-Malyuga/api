@@ -1,7 +1,8 @@
+import { UnauthorizedException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AbstractListDto } from 'src/common/dto/abstract.list-dto';
 import { Pagination } from 'src/common/dto/pagination.dto';
-import { Public } from '../auth/auth.guards';
+import { Auth, Public } from '../auth/auth.guards';
 import { UserCreateDto } from './dto/users.create-dto';
 import { UserFilterDto } from './dto/users.filter-dto';
 import { UserUpdateDto } from './dto/users.update-dto';
@@ -35,14 +36,23 @@ export class UsersResolver {
 
   @Mutation('userUpdate')
   async update(
+    @Auth() user: number,
     @Args('dto') dto: UserUpdateDto,
-    @Args('filter') filter: UserFilterDto,
+    @Args('id') id: number,
   ): Promise<User> {
-    return await this.service.update(dto, filter);
+    this.canActivate(user, id);
+    return await this.service.update(dto, id);
   }
 
   @Mutation('userDelete')
-  async delete(@Args('filter') filter: UserFilterDto): Promise<boolean> {
-    return await this.service.delete(filter);
+  async delete(@Auth() user: number, @Args('id') id: number): Promise<boolean> {
+    this.canActivate(user, id);
+    return await this.service.delete(id);
+  }
+
+  private canActivate(user: number, id: number): void {
+    if (user !== id) {
+      throw new UnauthorizedException();
+    }
   }
 }
