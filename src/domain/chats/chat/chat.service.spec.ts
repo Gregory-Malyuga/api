@@ -1,11 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
-import { AreaService } from './area.service';
+import { ChatService as Service } from './chat.service';
 
-describe('AreaService', () => {
+describe('ChatService', () => {
   let app: INestApplication;
-  let service: AreaService;
+  let service: Service;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -13,7 +13,7 @@ describe('AreaService', () => {
     }).compile();
 
     app = module.createNestApplication();
-    service = module.get<AreaService>(AreaService);
+    service = module.get<Service>(Service);
 
     app.init();
   });

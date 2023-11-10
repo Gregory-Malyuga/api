@@ -1,15 +1,15 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
-import { AreaRepository } from './area.repository';
-import { AreaResolver } from './area.resolver';
-import { AreaFactory } from './factories/area.factory';
+import { ChatRepository as Repository } from './chat.repository';
+import { ChatResolver as Resolver } from './chat.resolver';
+import { ChatFactory as Factory } from './factories/chat.factory';
 
-describe('AreasResolver', () => {
+describe('ChatsResolver', () => {
   let app: INestApplication;
-  let resolver: AreaResolver;
-  let repository: AreaRepository;
-  let factory: AreaFactory;
+  let resolver: Resolver;
+  let repository: Repository;
+  let factory: Factory;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -17,13 +17,13 @@ describe('AreasResolver', () => {
     }).compile();
 
     app = module.createNestApplication();
-    resolver = module.get<AreaResolver>(AreaResolver);
-    repository = module.get<AreaRepository>(AreaRepository);
-    factory = module.get<AreaFactory>(AreaFactory);
+    resolver = module.get<Resolver>(Resolver);
+    repository = module.get<Repository>(Repository);
+    factory = module.get<Factory>(Factory);
 
     await repository
       .find()
-      .then((Areas) => Areas.map((Area) => repository.remove(Area)));
+      .then((Chats) => Chats.map((Chat) => repository.remove(Chat)));
 
     app.init();
   });
@@ -36,9 +36,9 @@ describe('AreasResolver', () => {
     await resolver
       // TODO: Переделать на реальные данные с реальным пользователем
       .create(1, { name: 'name', description: 'description' })
-      .then(async (Area) => {
-        expect(Area.name).toBe('name');
-        expect(Area.description).toBe('description');
+      .then(async (Chat) => {
+        expect(Chat.name).toBe('name');
+        expect(Chat.description).toBe('description');
       });
   });
 
@@ -46,35 +46,35 @@ describe('AreasResolver', () => {
     await factory
       .create()
       .then(
-        async (Area) =>
+        async (Chat) =>
           await resolver.update(
-            Area.id,
+            Chat.id,
             {
-              ...Area,
+              ...Chat,
               ...{ name: 'new name', description: 'new description' },
             },
             {
-              id: Area.id,
+              id: Chat.id,
             },
           ),
       )
-      .then(async (Area) => {
-        expect(Area.name).toBe('new name');
-        expect(Area.description).toBe('new description');
+      .then(async (Chat) => {
+        expect(Chat.name).toBe('new name');
+        expect(Chat.description).toBe('new description');
       });
   });
 
   it('delete', async () => {
-    await factory.create().then(async (Area) => {
+    await factory.create().then(async (Chat) => {
       await resolver
-        .delete(Area.id, {
-          id: Area.id,
+        .delete(Chat.id, {
+          id: Chat.id,
         })
         .then((deleteResult) => expect(deleteResult).toBe(true));
       await repository
         .findOne({
           where: {
-            id: Area.id,
+            id: Chat.id,
           },
         })
         .then((result) => expect(result).toBe(null));
@@ -82,10 +82,10 @@ describe('AreasResolver', () => {
   });
 
   it('show', async () => {
-    await factory.create({ name: 'admin' }).then(async (Area) => {
+    await factory.create({ name: 'admin' }).then(async (Chat) => {
       await resolver
-        .findOne({ id: Area.id })
-        .then((Area) => expect(Area.name).toBe('admin'));
+        .findOne({ id: Chat.id })
+        .then((Chat) => expect(Chat.name).toBe('admin'));
     });
   });
 

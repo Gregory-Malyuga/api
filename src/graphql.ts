@@ -66,11 +66,11 @@ export interface ChatIndex {
 
 export interface IMutation {
     chatCreate(dto: ChatInputCreate): Nullable<Chat> | Promise<Nullable<Chat>>;
-    chatUpdate(dto: ChatInputUpdate, id: number): Nullable<Chat> | Promise<Nullable<Chat>>;
-    chatDelete(id: number): Nullable<boolean> | Promise<Nullable<boolean>>;
+    chatUpdate(dto: ChatInputUpdate, filter: Filter): Nullable<Chat> | Promise<Nullable<Chat>>;
+    chatDelete(filter: Filter): Nullable<boolean> | Promise<Nullable<boolean>>;
     userCreate(dto: UserInputCreate): Nullable<User> | Promise<Nullable<User>>;
-    userUpdate(dto: UserInputUpdate, id: number): Nullable<User> | Promise<Nullable<User>>;
-    userDelete(id: number): Nullable<boolean> | Promise<Nullable<boolean>>;
+    userUpdate(dto: UserInputUpdate, filter: Filter): Nullable<User> | Promise<Nullable<User>>;
+    userDelete(filter: Filter): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export interface User {

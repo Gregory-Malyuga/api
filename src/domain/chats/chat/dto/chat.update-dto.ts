@@ -1,6 +1,6 @@
 import { Max, Min } from 'class-validator';
 
-export class AreaUpdateDto {
+export class ChatUpdateDto {
   @Min(3)
   @Max(255)
   name?: string;
