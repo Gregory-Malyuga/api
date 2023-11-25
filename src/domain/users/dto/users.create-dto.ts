@@ -1,11 +1,11 @@
-import { Max, Min } from 'class-validator';
+import { Max, MaxLength, Min, MinLength } from 'class-validator';
 
 export class UserCreateDto {
-  @Min(3)
-  @Max(255)
+  @MinLength(3)
+  @MaxLength(255)
   login!: string;
 
-  @Min(16)
-  @Max(255)
+  @MinLength(8)
+  @MaxLength(255)
   password!: string;
 }
