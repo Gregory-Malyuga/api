@@ -6,7 +6,6 @@ import {
   Injectable,
   SetMetadata,
   UnauthorizedException,
-  createParamDecorator,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';

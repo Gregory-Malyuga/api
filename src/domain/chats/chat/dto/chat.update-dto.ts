@@ -1,11 +1,11 @@
-import { Max, Min } from 'class-validator';
+import { Max, MaxLength, Min, MinLength } from 'class-validator';
 
 export class ChatUpdateDto {
-  @Min(3)
-  @Max(255)
+  @MinLength(3)
+  @MaxLength(255)
   name?: string;
 
-  @Min(50)
-  @Max(2000)
+  @MinLength(50)
+  @MaxLength(2000)
   description?: string;
 }

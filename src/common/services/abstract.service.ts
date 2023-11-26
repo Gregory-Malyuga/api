@@ -16,12 +16,12 @@ export class AbstractService<Entity> {
 
   async findAndCount(
     filter: AbstractFilterDto,
-    pagination: Pagination,
+    pagination?: Pagination,
   ): Promise<AbstractListDto<Entity>> {
     const [items, total] = await this.repository.findAndCount({
       where: this.processFilter(filter),
-      skip: pagination.offset,
-      take: pagination.limit,
+      skip: pagination?.offset,
+      take: pagination?.limit,
     });
     return new AbstractListDto<Entity>(items, total);
   }

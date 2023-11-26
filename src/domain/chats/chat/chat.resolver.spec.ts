@@ -35,7 +35,7 @@ describe('ChatsResolver', () => {
   it('create', async () => {
     await resolver
       // TODO: Переделать на реальные данные с реальным пользователем
-      .create(1, { name: 'name', description: 'description' })
+      .create({ name: 'name', description: 'description' })
       .then(async (Chat) => {
         expect(Chat.name).toBe('name');
         expect(Chat.description).toBe('description');
@@ -48,7 +48,6 @@ describe('ChatsResolver', () => {
       .then(
         async (Chat) =>
           await resolver.update(
-            Chat.id,
             {
               ...Chat,
               ...{ name: 'new name', description: 'new description' },
@@ -67,7 +66,7 @@ describe('ChatsResolver', () => {
   it('delete', async () => {
     await factory.create().then(async (Chat) => {
       await resolver
-        .delete(Chat.id, {
+        .delete({
           id: Chat.id,
         })
         .then((deleteResult) => expect(deleteResult).toBe(true));
