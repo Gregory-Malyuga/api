@@ -1,6 +1,7 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   CanActivate,
+  createParamDecorator,
   ExecutionContext,
   Inject,
   Injectable,
@@ -15,6 +16,11 @@ import { UserRepository } from '../users/users.repository';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+export const Auth = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    return GqlExecutionContext.create(ctx).getContext().req.user;
+  },
+);
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -46,12 +52,13 @@ export class AuthGuard implements CanActivate {
     try {
       const gqlContext = GqlExecutionContext.create(context);
       const request = gqlContext.getContext().req;
-      const authorization = request.get('Authorization');
+      const authorization: string = request.get('Authorization');
       const token = authorization.replace('Bearer ', '');
       const payload: { id: number } = await this.cacheManager.get(token);
       this.user = await this.userRepository.findOneBy({
         id: payload.id,
       });
+      request['user'] = this.user;
       return true;
     } catch {
       throw new UnauthorizedException();

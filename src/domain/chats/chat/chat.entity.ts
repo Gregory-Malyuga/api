@@ -15,8 +15,8 @@ export class Chat extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ name: 'creator_id' })
-  creatorId: number;
+  @Column({ name: 'owner_id' })
+  ownerId: number;
 
   @Index()
   @Column()
