@@ -15,7 +15,7 @@ describe('UsersService', () => {
     app = module.createNestApplication();
     service = module.get<UsersService>(UsersService);
 
-    app.init();
+    await app.init();
   });
 
   it('should be defined', () => {

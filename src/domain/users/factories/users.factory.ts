@@ -6,6 +6,7 @@ import { UsersService } from '../users.service';
 @Injectable()
 export class UserFactory {
   constructor(private readonly service: UsersService) {}
+
   async create(dto?: object): Promise<User> {
     return await this.service.create({
       login: faker.string.sample({ min: 3, max: 255 }),

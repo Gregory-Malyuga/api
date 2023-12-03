@@ -1,4 +1,4 @@
-import { Max, MaxLength, Min, MinLength } from 'class-validator';
+import { MaxLength, MinLength } from 'class-validator';
 
 export class UserCreateDto {
   @MinLength(3)

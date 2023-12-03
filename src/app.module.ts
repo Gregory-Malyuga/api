@@ -14,6 +14,7 @@ import { User } from './domain/users/users.entity';
 import { UsersModule } from './domain/users/users.module';
 import { Chat } from './domain/chats/chat/chat.entity';
 import { ChatModule } from './domain/chats/chat/chat.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -40,6 +41,11 @@ import { ChatModule } from './domain/chats/chat/chat.module';
       store: redisStore,
       host: process.env.REDIS_HOST,
       port: 6379,
+    }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '60s' },
     }),
     UsersModule,
     AuthModule,

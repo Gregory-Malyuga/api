@@ -26,7 +26,7 @@ describe('UsersResolver', () => {
       .find()
       .then((users) => users.map((user) => repository.remove(user)));
 
-    app.init();
+    await app.init();
   });
 
   it('should be defined', () => {

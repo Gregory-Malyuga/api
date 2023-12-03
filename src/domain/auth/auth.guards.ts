@@ -10,8 +10,8 @@ import {
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
-import { UsersService } from '../users/users.service';
 import { User } from '../users/users.entity';
+import { UserRepository } from '../users/users.repository';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
   protected user: User;
 
   constructor(
-    protected userService: UsersService,
+    protected userRepository: UserRepository,
     protected reflector: Reflector,
     @Inject(CACHE_MANAGER) protected cacheManager: Cache,
   ) {}
@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
   }
 
   async specialCanActivate(context: ExecutionContext): Promise<boolean> {
-    return true;
+    return !!context;
   }
 
   private async extractTokenFromHeader(context: ExecutionContext) {
@@ -49,7 +49,7 @@ export class AuthGuard implements CanActivate {
       const authorization = request.get('Authorization');
       const token = authorization.replace('Bearer ', '');
       const payload: { id: number } = await this.cacheManager.get(token);
-      this.user = await this.userService.findOne({
+      this.user = await this.userRepository.findOneBy({
         id: payload.id,
       });
       return true;
