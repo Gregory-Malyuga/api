@@ -1,2 +1,9 @@
 node_modules/
 dist/
+.vscode/
+.env.example
+.eslintrc.js
+.gitignore
+.prettierignore
+.prettierrc
+README.md

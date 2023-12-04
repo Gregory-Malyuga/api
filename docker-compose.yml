@@ -7,19 +7,19 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 5433:${DB_PORT}
+      - 15432:${DB_PORT}
   redis:
     image: redis:7.2.1
     ports:
-      - 6380:${REDIS_PORT}
+      - 16379:${REDIS_PORT}
   app:
     build:
       context: .
-      dockerfile: ./images/node/Dockerfile
+      dockerfile: ./docker/node/Dockerfile
     volumes:
       - .:/usr/src/app
     ports:
-      - 8088:${APP_PORT}
+      - 18088:${APP_PORT}
     command: npm run start:dev
     env_file:
       - .env
