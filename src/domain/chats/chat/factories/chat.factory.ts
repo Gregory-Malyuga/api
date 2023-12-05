@@ -16,7 +16,7 @@ export class ChatFactory {
     return await this.service.create({
       name: faker.string.sample({ min: 1, max: 255 }),
       description: faker.string.sample({ min: 1, max: 2000 }),
-      creatorId: user.id,
+      ownerId: user.id,
       ...dto,
     });
   }

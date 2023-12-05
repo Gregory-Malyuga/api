@@ -4,10 +4,12 @@ import { Reflector } from '@nestjs/core';
 import { Cache } from 'cache-manager';
 import { AuthGuard } from 'src/domain/auth/auth.guards';
 import { UserRepository } from 'src/domain/users/users.repository';
-import { In, JsonContains, Repository } from 'typeorm';
+import { BaseEntity, In, JsonContains, Repository } from 'typeorm';
 
 @Injectable()
-export abstract class AbstractGuard<Entity> extends AuthGuard {
+export abstract class AbstractGuard<
+  Entity extends BaseEntity,
+> extends AuthGuard {
   constructor(
     protected userRepository: UserRepository,
     protected reflector: Reflector,

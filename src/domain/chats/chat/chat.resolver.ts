@@ -11,7 +11,6 @@ import { ChatCreateDto as CreateDto } from './dto/chat.create-dto';
 import { ChatFilterDto as FilterDto } from './dto/chat.filter-dto';
 import { ChatUpdateDto as UpdateDto } from './dto/chat.update-dto';
 
-// TOOD: Добавить гварды на и продумать бизнес логику
 @Resolver('Chat')
 export class ChatResolver {
   constructor(private readonly service: Service) {}

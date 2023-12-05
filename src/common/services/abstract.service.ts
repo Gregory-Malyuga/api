@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { In, JsonContains, Repository } from 'typeorm';
+import { BaseEntity, In, JsonContains, Repository } from 'typeorm';
 import { AbstractFilterDto } from '../dto/abstract.filter-dto';
 import { Pagination } from '../dto/pagination.dto';
 import { AbstractListDto } from '../dto/abstract.list-dto';
 
 @Injectable()
-export class AbstractService<Entity> {
+export class AbstractService<Entity extends BaseEntity> {
   constructor(protected repository: Repository<Entity>) {}
 
   async findOne(filter: AbstractFilterDto): Promise<Entity> {

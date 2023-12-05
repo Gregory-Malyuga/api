@@ -4,12 +4,15 @@ import { AppModule } from 'src/app.module';
 import { ChatRepository as Repository } from './chat.repository';
 import { ChatResolver as Resolver } from './chat.resolver';
 import { ChatFactory as Factory } from './factories/chat.factory';
+import { UserFactory } from 'src/domain/users/factories/users.factory';
+import { User } from 'src/domain/users/users.entity';
 
 describe('ChatsResolver', () => {
   let app: INestApplication;
   let resolver: Resolver;
   let repository: Repository;
   let factory: Factory;
+  let userFactory: UserFactory;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,6 +23,7 @@ describe('ChatsResolver', () => {
     resolver = module.get<Resolver>(Resolver);
     repository = module.get<Repository>(Repository);
     factory = module.get<Factory>(Factory);
+    userFactory = module.get<UserFactory>(UserFactory);
 
     await repository
       .find()
@@ -33,9 +37,11 @@ describe('ChatsResolver', () => {
   });
 
   it('create', async () => {
-    await resolver
-      // TODO: Переделать на реальные данные с реальным пользователем
-      .create({ name: 'name', description: 'description' })
+    await userFactory
+      .create()
+      .then((user: User) =>
+        resolver.create(user, { name: 'name', description: 'description' }),
+      )
       .then(async (Chat) => {
         expect(Chat.name).toBe('name');
         expect(Chat.description).toBe('description');
