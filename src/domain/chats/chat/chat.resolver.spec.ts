@@ -14,7 +14,6 @@ describe('ChatsResolver', () => {
   let repository: Repository;
   let factory: Factory;
   let userFactory: UserFactory;
-  let userRepostiry: UserRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -26,7 +25,6 @@ describe('ChatsResolver', () => {
     repository = module.get<Repository>(Repository);
     factory = module.get<Factory>(Factory);
     userFactory = module.get<UserFactory>(UserFactory);
-    userRepostiry = module.get<UserRepository>(UserRepository);
 
     await repository
       .find()
@@ -97,7 +95,7 @@ describe('ChatsResolver', () => {
     });
   });
 
-  it.only('owner relation', async () => {
+  it('owner relation', async () => {
     await factory
       .create()
       .then(async (chat) => repository.findOneBy({ id: chat.id }))
