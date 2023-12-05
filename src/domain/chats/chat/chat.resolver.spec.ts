@@ -6,6 +6,7 @@ import { ChatResolver as Resolver } from './chat.resolver';
 import { ChatFactory as Factory } from './factories/chat.factory';
 import { UserFactory } from 'src/domain/users/factories/users.factory';
 import { User } from 'src/domain/users/users.entity';
+import { UserRepository } from 'src/domain/users/users.repository';
 
 describe('ChatsResolver', () => {
   let app: INestApplication;
@@ -13,6 +14,7 @@ describe('ChatsResolver', () => {
   let repository: Repository;
   let factory: Factory;
   let userFactory: UserFactory;
+  let userRepostiry: UserRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,6 +26,7 @@ describe('ChatsResolver', () => {
     repository = module.get<Repository>(Repository);
     factory = module.get<Factory>(Factory);
     userFactory = module.get<UserFactory>(UserFactory);
+    userRepostiry = module.get<UserRepository>(UserRepository);
 
     await repository
       .find()
@@ -92,6 +95,18 @@ describe('ChatsResolver', () => {
         .findOne({ id: Chat.id })
         .then((Chat) => expect(Chat.name).toBe('admin'));
     });
+  });
+
+  it.only('owner relation', async () => {
+    await factory
+      .create()
+      .then(async (chat) => repository.findOneBy({ id: chat.id }))
+      .then(async (chat) => {
+        expect((await chat.owner).id).toBe(chat.ownerId);
+        expect(
+          (await (await chat.owner).chatsOwner).map((chat) => chat.id),
+        ).toContain(chat.id);
+      });
   });
 
   afterAll(() => app.close());
