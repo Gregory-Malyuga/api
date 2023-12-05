@@ -27,8 +27,8 @@ export class User extends BaseEntity {
   salt!: string;
 
   // Список чатов где данный пользователь - владелец
-  @OneToMany(() => Chat, (chat) => chat.owner)
-  chatsOwner: Promise<Chat[]>;
+  @OneToMany(() => Chat, (chat) => chat.creator)
+  chatsCreator: Promise<Chat[]>;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Timestamp;

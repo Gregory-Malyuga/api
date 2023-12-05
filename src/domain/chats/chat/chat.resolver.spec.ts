@@ -95,14 +95,14 @@ describe('ChatsResolver', () => {
     });
   });
 
-  it('owner relation', async () => {
+  it('creator relation', async () => {
     await factory
       .create()
       .then(async (chat) => repository.findOneBy({ id: chat.id }))
       .then(async (chat) => {
-        expect((await chat.owner).id).toBe(chat.ownerId);
+        expect((await chat.creator).id).toBe(chat.creatorId);
         expect(
-          (await (await chat.owner).chatsOwner).map((chat) => chat.id),
+          (await (await chat.creator).chatsCreator).map((chat) => chat.id),
         ).toContain(chat.id);
       });
   });

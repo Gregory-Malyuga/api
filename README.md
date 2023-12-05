@@ -3,14 +3,14 @@ docker-compose up -d
 Если делаете relation с кастомной колонкой используйте такую конструкцию
 
 ```
-@ManyToOne(() => User, (user: User) => user.chatsOwner, {
+@ManyToOne(() => User, (user: User) => user.chatsCreator, {
   createForeignKeyConstraints: false,
 })
 @JoinColumn({
-  name: 'owner_id',
-  foreignKeyConstraintName: 'owner_id',
+  name: 'creator_id',
+  foreignKeyConstraintName: 'creator_id',
 })
-owner: Promise<User>;
+creator: Promise<User>;
 ```
 
 Так же чтобы подгрузить relation с использованием lazyLoading как в примере выше необходим

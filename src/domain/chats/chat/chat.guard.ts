@@ -10,6 +10,6 @@ export class ChatGuard extends AbstractGuard<Entity> {
     const gqlContext = GqlExecutionContext.create(context);
     return await this.repository
       .findOneBy(this.processFilter(gqlContext.getArgs().filter))
-      .then((model: Entity) => this.user.id === model.ownerId);
+      .then((model: Entity) => this.user.id === model.creatorId);
   }
 }

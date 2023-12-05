@@ -21,17 +21,17 @@ export class Chat extends BaseEntity {
   id!: number;
 
   // загружается только при вызове find
-  @ManyToOne(() => User, (user: User) => user.chatsOwner, {
+  @ManyToOne(() => User, (user: User) => user.chatsCreator, {
     createForeignKeyConstraints: false,
   })
   @JoinColumn({
-    name: 'owner_id',
-    foreignKeyConstraintName: 'owner_id',
+    name: 'creator_id',
+    foreignKeyConstraintName: 'creator_id',
   })
-  owner: Promise<User>;
+  creator: Promise<User>;
 
-  @Column({ name: 'owner_id' })
-  ownerId: number;
+  @Column({ name: 'creator_id' })
+  creatorId: number;
 
   @Index()
   @Column()

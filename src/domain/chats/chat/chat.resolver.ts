@@ -33,7 +33,7 @@ export class ChatResolver {
     @Auth() user: User,
     @Args('dto') dto: CreateDto,
   ): Promise<Entity> {
-    return await this.service.create({ ...dto, ...{ ownerId: user.id } });
+    return await this.service.create({ ...dto, ...{ creatorId: user.id } });
   }
 
   @UseGuards(ChatGuard)

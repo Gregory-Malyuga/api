@@ -2,7 +2,7 @@ import { MaxLength, MinLength } from 'class-validator';
 
 export class ChatUpdateDto {
   // заменить на проверку существования
-  ownerId?: number;
+  creatorId?: number;
 
   @MinLength(3)
   @MaxLength(255)
