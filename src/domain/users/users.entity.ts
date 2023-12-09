@@ -4,7 +4,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
   OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,

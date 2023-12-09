@@ -7,17 +7,17 @@ import { BaseRepository } from '../repositories/base.repository';
 
 @Injectable()
 export class AbstractService<Entity extends ObjectLiteral> {
-  constructor(protected repository: BaseRepository<Entity>) {}
+  constructor(protected repo: BaseRepository<Entity>) {}
 
   async findOne(where: AbstractFilterDto): Promise<Entity> {
-    return await this.repository.findOneOrFailWithProcessWhere(where);
+    return await this.repo.findOneOrFailWithProcessWhere(where);
   }
 
   async findAndCount(
     where: AbstractFilterDto,
     pagination?: Pagination,
   ): Promise<AbstractListDto<Entity>> {
-    return await this.repository
+    return await this.repo
       .findAndCountWithProcessWhere(
         where,
         pagination?.offset,
@@ -27,19 +27,19 @@ export class AbstractService<Entity extends ObjectLiteral> {
   }
 
   async create(dto: any): Promise<Entity> {
-    return await this.repository.save(dto);
+    return await this.repo.save(dto);
   }
 
   async update(dto: any, filter: AbstractFilterDto): Promise<Entity> {
-    return await this.repository
+    return await this.repo
       .findOneOrFailWithProcessWhere(filter)
-      .then((model) => this.repository.save({ ...model, ...dto }));
+      .then((model) => this.repo.save({ ...model, ...dto }));
   }
 
   async delete(filter: AbstractFilterDto): Promise<boolean> {
-    return await this.repository
+    return await this.repo
       .findOneOrFailWithProcessWhere(filter)
-      .then((model) => this.repository.remove(model))
+      .then((model) => this.repo.remove(model))
       .then(() => true);
   }
 }

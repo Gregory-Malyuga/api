@@ -5,7 +5,7 @@ import { ChatRepository as Repository } from './chat.repository';
 
 @Injectable()
 export class ChatService extends AbstractService<Entity> {
-  constructor(protected repository: Repository) {
-    super(repository);
+  constructor(protected repo: Repository) {
+    super(repo);
   }
 }
