@@ -27,9 +27,9 @@ export class AuthGuard implements CanActivate {
   protected user: User;
 
   constructor(
-    protected userRepository: UserRepository,
-    protected reflector: Reflector,
     @Inject(CACHE_MANAGER) protected cacheManager: Cache,
+    protected reflector: Reflector,
+    protected repoUser: UserRepository,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -55,7 +55,7 @@ export class AuthGuard implements CanActivate {
       const authorization: string = request.get('Authorization');
       const token = authorization.replace('Bearer ', '');
       const payload: { id: number } = await this.cacheManager.get(token);
-      this.user = await this.userRepository.findOneBy({
+      this.user = await this.repoUser.findOneBy({
         id: payload.id,
       });
       request['user'] = this.user;

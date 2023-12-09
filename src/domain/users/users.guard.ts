@@ -8,7 +8,7 @@ import { User } from './users.entity';
 export class UserGuard extends AuthGuard {
   async specialCanActivate(context: ExecutionContext): Promise<boolean> {
     const gqlContext = GqlExecutionContext.create(context);
-    return await this.userRepository
+    return await this.repoUser
       .findOneBy(gqlContext.getArgs().filter)
       .then((user: User) => this.user.id === user.id);
   }

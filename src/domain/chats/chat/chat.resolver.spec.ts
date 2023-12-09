@@ -6,12 +6,11 @@ import { ChatResolver as Resolver } from './chat.resolver';
 import { ChatFactory as Factory } from './factories/chat.factory';
 import { UserFactory } from 'src/domain/users/factories/users.factory';
 import { User } from 'src/domain/users/users.entity';
-import { UserRepository } from 'src/domain/users/users.repository';
 
 describe('ChatsResolver', () => {
   let app: INestApplication;
   let resolver: Resolver;
-  let repository: Repository;
+  let repo: Repository;
   let factory: Factory;
   let userFactory: UserFactory;
 
@@ -22,13 +21,13 @@ describe('ChatsResolver', () => {
 
     app = module.createNestApplication();
     resolver = module.get<Resolver>(Resolver);
-    repository = module.get<Repository>(Repository);
+    repo = module.get<Repository>(Repository);
     factory = module.get<Factory>(Factory);
     userFactory = module.get<UserFactory>(UserFactory);
 
-    await repository
+    await repo
       .find()
-      .then((Chats) => Chats.map((Chat) => repository.remove(Chat)));
+      .then((Chats) => Chats.map((Chat) => repo.remove(Chat)));
 
     app.init();
   });
@@ -77,7 +76,7 @@ describe('ChatsResolver', () => {
           id: Chat.id,
         })
         .then((deleteResult) => expect(deleteResult).toBe(true));
-      await repository
+      await repo
         .findOne({
           where: {
             id: Chat.id,
@@ -98,7 +97,7 @@ describe('ChatsResolver', () => {
   it('creator relation', async () => {
     await factory
       .create()
-      .then(async (chat) => repository.findOneBy({ id: chat.id }))
+      .then(async (chat) => repo.findOneBy({ id: chat.id }))
       .then(async (chat) => {
         expect((await chat.creator).id).toBe(chat.creatorId);
         expect(

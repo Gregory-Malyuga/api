@@ -2,15 +2,15 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { hash } from 'bcrypt';
 import { AppModule } from 'src/app.module';
-import { UserFactory } from './factories/users.factory';
-import { UserRepository } from './users.repository';
-import { UsersResolver } from './users.resolver';
+import { UserFactory as Factory } from './factories/users.factory';
+import { UserRepository as Repository } from './users.repository';
+import { UsersResolver as Resolver } from './users.resolver';
 
 describe('UsersResolver', () => {
   let app: INestApplication;
-  let resolver: UsersResolver;
-  let repository: UserRepository;
-  let factory: UserFactory;
+  let resolver: Resolver;
+  let repo: Repository;
+  let factory: Factory;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -18,13 +18,13 @@ describe('UsersResolver', () => {
     }).compile();
 
     app = module.createNestApplication();
-    resolver = module.get<UsersResolver>(UsersResolver);
-    repository = module.get<UserRepository>(UserRepository);
-    factory = module.get<UserFactory>(UserFactory);
+    resolver = module.get<Resolver>(Resolver);
+    repo = module.get<Repository>(Repository);
+    factory = module.get<Factory>(Factory);
 
-    await repository
+    await repo
       .find()
-      .then((users) => users.map((user) => repository.remove(user)));
+      .then((models) => models.map((model) => repo.remove(model)));
 
     await app.init();
   });
@@ -36,9 +36,9 @@ describe('UsersResolver', () => {
   it('create', async () => {
     await resolver
       .create({ login: 'login', password: 'password' })
-      .then(async (user) => {
-        expect(user.login).toBe('login');
-        expect(user.password).toBe(await hash('password', user.salt));
+      .then(async (model) => {
+        expect(model.login).toBe('login');
+        expect(model.password).toBe(await hash('password', model.salt));
       });
   });
 
@@ -46,34 +46,34 @@ describe('UsersResolver', () => {
     await factory
       .create()
       .then(
-        async (user) =>
+        async (model) =>
           await resolver.update(
             {
-              ...user,
+              ...model,
               ...{ login: 'new login', password: 'new password' },
             },
             {
-              id: user.id,
+              id: model.id,
             },
           ),
       )
-      .then(async (user) => {
-        expect(user.login).toBe('new login');
-        expect(user.password).toBe(await hash('new password', user.salt));
+      .then(async (model) => {
+        expect(model.login).toBe('new login');
+        expect(model.password).toBe(await hash('new password', model.salt));
       });
   });
 
   it('delete', async () => {
-    await factory.create().then(async (user) => {
+    await factory.create().then(async (model) => {
       await resolver
         .delete({
-          id: user.id,
+          id: model.id,
         })
         .then((deleteResult) => expect(deleteResult).toBe(true));
-      await repository
+      await repo
         .findOne({
           where: {
-            id: user.id,
+            id: model.id,
           },
         })
         .then((result) => expect(result).toBe(null));
@@ -81,10 +81,10 @@ describe('UsersResolver', () => {
   });
 
   it('show', async () => {
-    await factory.create({ login: 'admin' }).then(async (user) => {
+    await factory.create({ login: 'admin' }).then(async (model) => {
       await resolver
-        .findOne({ id: user.id })
-        .then((user) => expect(user.login).toBe('admin'));
+        .findOne({ id: model.id })
+        .then((model) => expect(model.login).toBe('admin'));
     });
   });
 
