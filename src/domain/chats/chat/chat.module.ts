@@ -9,6 +9,6 @@ import { ChatFactory as Factory } from './factories/chat.factory';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Entity]), UsersModule],
-  providers: [Service, Resolver, Repository, Factory],
+  providers: [Repository, Service, Resolver, Factory],
 })
 export class ChatModule {}
