@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Index(['chatId', 'userId'])
-@Entity('chats')
+@Index(['chatId', 'userId', 'roleId'])
+@Entity('chat-user')
 export class ChatUser extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -19,4 +19,8 @@ export class ChatUser extends BaseEntity {
   @Index()
   @Column()
   userId: number;
+
+  @Index()
+  @Column()
+  roleId: number;
 }

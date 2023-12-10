@@ -8,11 +8,15 @@ import { User as Entity } from './users.entity';
 import { UserRepository as Repository } from './users.repository';
 import { Cache } from 'cache-manager';
 import { JwtService } from '@nestjs/jwt';
-import { AbstractFilterDto } from '../../common/dto/abstract.filter-dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
-export class UsersService extends AbstractService<Entity> {
+export class UsersService extends AbstractService<
+  Entity,
+  CreateDto,
+  UpdateDto,
+  FilterDto
+> {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private jwtService: JwtService,
@@ -40,7 +44,7 @@ export class UsersService extends AbstractService<Entity> {
     });
   }
 
-  async delete(filter: AbstractFilterDto): Promise<boolean> {
+  async delete(filter: FilterDto): Promise<boolean> {
     return await this.findOne(filter)
       .then((model) => this.repository.softRemove(model))
       .then((model: Entity) => this.cacheClear(model))

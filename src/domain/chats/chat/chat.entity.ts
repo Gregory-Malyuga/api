@@ -23,12 +23,13 @@ export class Chat extends BaseEntity {
     createForeignKeyConstraints: false,
   })
   @JoinColumn({
-    name: 'creator_id',
-    foreignKeyConstraintName: 'creator_id',
+    name: 'creatorId',
+    foreignKeyConstraintName: 'creatorId',
   })
   creator: Promise<User>;
 
-  @Column({ name: 'creator_id' })
+  @Index()
+  @Column()
   creatorId: number;
 
   @Index()

@@ -1,6 +1,7 @@
 import { MaxLength, MinLength } from 'class-validator';
+import { AbstractUpdateDto } from 'src/common/dto/abstract.update-dto';
 
-export class ChatUpdateDto {
+export class ChatUpdateDto extends AbstractUpdateDto {
   // заменить на проверку существования
   creatorId?: number;
 

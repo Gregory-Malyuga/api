@@ -1,6 +1,7 @@
 import { MaxLength, MinLength } from 'class-validator';
+import { AbstractUpdateDto } from 'src/common/dto/abstract.update-dto';
 
-export class UserUpdateDto {
+export class UserUpdateDto extends AbstractUpdateDto {
   // заменить на проверку существования
   @MinLength(3)
   @MaxLength(255)

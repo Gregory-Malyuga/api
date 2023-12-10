@@ -81,11 +81,13 @@ describe('UsersResolver', () => {
   });
 
   it('show', async () => {
-    await factory.create({ login: 'admin' }).then(async (model) => {
-      await resolver
-        .findOne({ id: model.id })
-        .then((model) => expect(model.login).toBe('admin'));
-    });
+    await factory
+      .create({ login: 'admin', password: 'password' })
+      .then(async (model) => {
+        await resolver
+          .findOne({ id: model.id })
+          .then((model) => expect(model.login).toBe('admin'));
+      });
   });
 
   afterAll(() => app.close());

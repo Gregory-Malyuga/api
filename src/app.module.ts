@@ -15,6 +15,7 @@ import { UsersModule } from './domain/users/users.module';
 import { Chat } from './domain/chats/chat/chat.entity';
 import { ChatModule } from './domain/chats/chat/chat.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ChatUserModule } from './domain/chats/user/chat-user.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { JwtModule } from '@nestjs/jwt';
     UsersModule,
     AuthModule,
     ChatModule,
+    ChatUserModule,
   ],
   controllers: [AppController],
   providers: [
