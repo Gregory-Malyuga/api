@@ -12,7 +12,7 @@ describe('UsersResolver', () => {
   let repo: Repository;
   let factory: Factory;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -22,12 +22,10 @@ describe('UsersResolver', () => {
     repo = module.get<Repository>(Repository);
     factory = module.get<Factory>(Factory);
 
-    await repo
-      .find()
-      .then((models) => models.map((model) => repo.remove(model)));
-
     await app.init();
   });
+
+  beforeEach(async () => await repo.clear());
 
   it('should be defined', () => {
     expect(resolver).toBeDefined();
@@ -90,5 +88,5 @@ describe('UsersResolver', () => {
       });
   });
 
-  afterAll(() => app.close());
+  afterAll(async () => await app.close());
 });

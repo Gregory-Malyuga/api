@@ -21,7 +21,7 @@ export class AbstractService<
   }
 
   async findAndCount(
-    where: AbstractFilterDto,
+    where: FilterDto,
     pagination?: Pagination,
   ): Promise<AbstractListDto<Entity>> {
     return await this.repo

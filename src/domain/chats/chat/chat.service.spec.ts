@@ -7,7 +7,7 @@ describe('ChatService', () => {
   let app: INestApplication;
   let service: Service;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -15,12 +15,12 @@ describe('ChatService', () => {
     app = module.createNestApplication();
     service = module.get<Service>(Service);
 
-    app.init();
+    await app.init();
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  afterAll(() => app.close);
+  afterAll(async () => await app.close);
 });

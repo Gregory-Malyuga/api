@@ -5,7 +5,7 @@ import { AuthResolver } from './auth.resolver';
 describe('AuthResolver', () => {
   let resolver: AuthResolver;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();

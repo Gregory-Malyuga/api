@@ -14,7 +14,7 @@ describe('ChatsResolver', () => {
   let factory: Factory;
   let userFactory: UserFactory;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -25,12 +25,10 @@ describe('ChatsResolver', () => {
     factory = module.get<Factory>(Factory);
     userFactory = module.get<UserFactory>(UserFactory);
 
-    await repo
-      .find()
-      .then((Chats) => Chats.map((Chat) => repo.remove(Chat)));
-
-    app.init();
+    await app.init();
   });
+
+  beforeEach(async () => await repo.clear());
 
   it('should be defined', () => {
     expect(resolver).toBeDefined();
@@ -106,5 +104,5 @@ describe('ChatsResolver', () => {
       });
   });
 
-  afterAll(() => app.close());
+  afterAll(async () => await app.close());
 });

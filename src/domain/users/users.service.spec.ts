@@ -7,7 +7,7 @@ describe('UsersService', () => {
   let app: INestApplication;
   let service: Service;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -22,5 +22,5 @@ describe('UsersService', () => {
     expect(service).toBeDefined();
   });
 
-  afterAll(() => app.close);
+  afterAll(async () => await app.close());
 });
