@@ -6,10 +6,9 @@ import { ChatRepository as Repository } from './chat.repository';
 import { ChatResolver as Resolver } from './chat.resolver';
 import { ChatService as Service } from './chat.service';
 import { ChatFactory as Factory } from './factories/chat.factory';
-import { ChatUserModule } from '../user/chat-user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Entity]), UsersModule, ChatUserModule],
+  imports: [TypeOrmModule.forFeature([Entity]), UsersModule],
   providers: [Repository, Service, Resolver, Factory],
   exports: [Repository, Factory],
 })

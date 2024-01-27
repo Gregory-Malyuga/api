@@ -3,7 +3,6 @@ import { AbstractService } from 'src/common/services/abstract.service';
 import { Chat as Entity } from './chat.entity';
 import { ChatRepository as Repository } from './chat.repository';
 import { ChatCreateDto as CreateDto } from './dto/chat.create-dto';
-import { ChatUserService } from '../user/chat-user.service';
 import { ChatUpdateDto as UpdateDto } from './dto/chat.update-dto';
 import { ChatFilterDto as FilterDto } from './dto/chat.filter-dto';
 import { User } from 'src/domain/users/users.entity';
@@ -15,10 +14,7 @@ export class ChatService extends AbstractService<
   UpdateDto,
   FilterDto
 > {
-  constructor(
-    protected repo: Repository,
-    protected chatUserService: ChatUserService,
-  ) {
+  constructor(protected repo: Repository) {
     super(repo);
   }
 

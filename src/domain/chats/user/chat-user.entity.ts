@@ -19,8 +19,4 @@ export class ChatUser extends BaseEntity {
   @Index()
   @Column()
   userId: number;
-
-  @Index()
-  @Column()
-  roleId: number;
 }
