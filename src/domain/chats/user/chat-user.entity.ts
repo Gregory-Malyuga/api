@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Index(['chatId', 'userId', 'roleId'])
+@Index(['chatId', 'userId'], { unique: true })
 @Entity('chat-user')
 export class ChatUser extends BaseEntity {
   @PrimaryGeneratedColumn()

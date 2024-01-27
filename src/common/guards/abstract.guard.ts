@@ -9,7 +9,7 @@ import { BaseRepository } from '../repositories/base.repository';
 
 @Injectable()
 export abstract class AbstractGuard<T extends ObjectLiteral> extends AuthGuard {
-  constructor(
+  protected constructor(
     @Inject(CACHE_MANAGER) protected cacheManager: Cache,
     protected reflector: Reflector,
     protected repoUser: UserRepository,

@@ -4,7 +4,7 @@ import { Chat } from '../chat.entity';
 import { ChatService as Service } from '../chat.service';
 import { UserFactory } from 'src/domain/users/factories/users.factory';
 import { ChatCreateDto } from '../dto/chat.create-dto';
-import { User } from 'src/graphql';
+import { User } from 'src/domain/users/users.entity';
 
 @Injectable()
 export class ChatFactory {
