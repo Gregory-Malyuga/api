@@ -4,4 +4,5 @@ import { AbstractUpdateDto } from 'src/common/dto/abstract.update-dto';
 export class ChatUserUpdateDto extends AbstractUpdateDto {
   chatId?: number;
   userId?: number;
+  roleId?: number;
 }

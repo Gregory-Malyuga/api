@@ -5,7 +5,9 @@ import { ChatUserService as Service } from './chat-user.service';
 import { UserFactory } from 'src/domain/users/factories/users.factory';
 import { ChatFactory } from '../chat/factories/chat.factory';
 import { ChatUserFactory as Factory } from './factories/chat-user.factory';
-import { ChatUser } from './chat-user.entity';
+import { ChatUser as Entity } from './chat-user.entity';
+import { ChatUserRoles } from './enum/chat-user.roles';
+import { AbstractListDto } from 'src/common/dto/abstract.list-dto';
 
 describe('ChatUserService', () => {
   let app: INestApplication;
@@ -40,6 +42,7 @@ describe('ChatUserService', () => {
       await service.create({
         userId: user.id,
         chatId: chat.id,
+        roleId: ChatUserRoles.owner,
       }),
     ).not.toBeUndefined();
   });
@@ -73,12 +76,18 @@ describe('ChatUserService', () => {
   });
 
   it('schould be findAndCount', async () => {
-    const chatUser = await factory.create();
-    expect(
-      (await service.findAndCount({})).items.map(
-        (chatUser: ChatUser) => chatUser.id,
-      ),
-    ).toContain(chatUser.id);
+    await factory.create().then(
+      async (entity: Entity) =>
+        await service
+          .findAndCount({
+            chatId: entity.chatId,
+            userId: entity.userId,
+          })
+          .then((list: AbstractListDto<Entity>) =>
+            list.items.map((entity: Entity) => entity.id),
+          )
+          .then((ids) => expect(ids).toContain(entity.id)),
+    );
   });
 
   it('schould be delete', async () => {
@@ -86,6 +95,32 @@ describe('ChatUserService', () => {
     await service
       .delete({ chatId: chatUser.chatId, userId: chatUser.userId })
       .then((result) => expect(result).toBe(true));
+  });
+
+  it('schould be attached to chat', async () => {
+    await factory
+      .create()
+      .then(
+        async (entity: Entity) =>
+          await service
+            .findOne({ chatId: entity.chatId, userId: entity.userId })
+            .then(async (loadedEntity: Entity) =>
+              expect((await loadedEntity.chat).id).toEqual(loadedEntity.chatId),
+            ),
+      );
+  });
+
+  it('schould be attached to user', async () => {
+    await factory
+      .create()
+      .then(
+        async (entity: Entity) =>
+          await service
+            .findOne({ chatId: entity.chatId, userId: entity.userId })
+            .then(async (loadedEntity: Entity) =>
+              expect((await loadedEntity.user).id).toEqual(loadedEntity.userId),
+            ),
+      );
   });
 
   afterAll(async () => app.close);

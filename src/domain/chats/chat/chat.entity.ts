@@ -1,4 +1,3 @@
-import { User } from 'src/domain/users/users.entity';
 import {
   BaseEntity,
   Column,
@@ -6,27 +5,28 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
-  JoinColumn,
-  ManyToOne,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
+import { ChatUser } from '../user/chat-user.entity';
+import { User } from 'src/domain/users/users.entity';
 
 @Entity('chats')
 export class Chat extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  // загружается только при вызове find
-  @ManyToOne(() => User, (user: User) => user.chatsCreator, {
-    createForeignKeyConstraints: false,
-  })
-  @JoinColumn({
-    name: 'creatorId',
-    foreignKeyConstraintName: 'creatorId',
-  })
-  creator: Promise<User>;
+  @OneToMany(() => ChatUser, (chatUser) => chatUser.chat)
+  chatUsers: Promise<ChatUser[]>;
+
+  // @OneToOne(() => ChatUser, (chatUser: ChatUser) => chatUser.owner)
+  // owner: Promise<User>;
+
+  // @ManyToMany(() => ChatUser, (chatUser: ChatUser) => chatUser.members)
+  // members: Promise<User[]>;
 
   @Index()
   @Column()

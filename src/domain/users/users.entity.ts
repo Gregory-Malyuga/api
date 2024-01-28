@@ -9,7 +9,7 @@ import {
   Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
-import { Chat } from '../chats/chat/chat.entity';
+import { ChatUser } from '../chats/user/chat-user.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -25,10 +25,6 @@ export class User extends BaseEntity {
   @Column()
   salt!: string;
 
-  // Список чатов где данный пользователь - владелец
-  @OneToMany(() => Chat, (chat) => chat.creator)
-  chatsCreator: Promise<Chat[]>;
-
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Timestamp;
 
@@ -37,4 +33,7 @@ export class User extends BaseEntity {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt!: Timestamp;
+
+  @OneToMany(() => ChatUser, (chatUser: ChatUser) => chatUser.user)
+  chatUsers: Promise<ChatUser[]>;
 }

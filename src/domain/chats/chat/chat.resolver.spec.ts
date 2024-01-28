@@ -92,17 +92,5 @@ describe('ChatsResolver', () => {
     });
   });
 
-  it('creator relation', async () => {
-    await factory
-      .create()
-      .then(async (chat) => repo.findOneBy({ id: chat.id }))
-      .then(async (chat) => {
-        expect((await chat.creator).id).toBe(chat.creatorId);
-        expect(
-          (await (await chat.creator).chatsCreator).map((chat) => chat.id),
-        ).toContain(chat.id);
-      });
-  });
-
   afterAll(async () => await app.close());
 });
