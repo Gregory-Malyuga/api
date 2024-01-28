@@ -1,8 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AbstractListDto } from 'src/common/dto/abstract.list-dto';
 import { Pagination } from 'src/common/dto/pagination.dto';
-import { Auth } from '../../auth/auth.guards';
-import { User } from '../../users/users.entity';
 import { ChatUser as Entity } from './chat-user.entity';
 import { ChatUserService as Service } from './chat-user.service';
 import { ChatUserCreateDto as CreateDto } from './dto/chat-user.create-dto';
@@ -30,10 +28,7 @@ export class ChatUserResolver {
 
   @UseGuards(ChatUserGuard)
   @Mutation('chatUserCreate')
-  async create(
-    @Auth() user: User,
-    @Args('dto') dto: CreateDto,
-  ): Promise<Entity> {
+  async create(@Args('dto') dto: CreateDto): Promise<Entity> {
     return await this.service.create(dto);
   }
 
