@@ -1,3 +1,5 @@
+import { ChatUser } from 'src/domain/chats/user/chat-user.entity';
+import { User } from 'src/domain/users/users.entity';
 import {
   BaseEntity,
   Column,
@@ -5,24 +7,31 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
-import { ChatUser } from '../user/chat-user.entity';
 
 @Entity('chats')
 export class Chat extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToMany(() => ChatUser, (chatUser) => chatUser.chat)
-  chatUsers: Promise<ChatUser[]>;
+  @ManyToOne(() => User, (user: User) => user.chatsCreator, {
+    createForeignKeyConstraints: false,
+  })
+  @JoinColumn({
+    name: 'creatorId',
+    foreignKeyConstraintName: 'creatorId',
+  })
+  creator: Promise<User>;
 
   @Index()
-  @Column()
-  creatorId: number;
+  @Column({ nullable: false })
+  creatorId!: number;
 
   @Index()
   @Column()
@@ -39,4 +48,7 @@ export class Chat extends BaseEntity {
 
   @DeleteDateColumn()
   deletedAt!: Timestamp;
+
+  @OneToMany(() => ChatUser, (chatUser) => chatUser.chat)
+  chatUsers: Promise<ChatUser[]>;
 }

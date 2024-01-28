@@ -1,11 +1,12 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
+import { UserFactory } from 'src/domain/users/factories/users.factory';
+import { User } from 'src/domain/users/users.entity';
+import { Chat as Entity } from './chat.entity';
 import { ChatRepository as Repository } from './chat.repository';
 import { ChatResolver as Resolver } from './chat.resolver';
 import { ChatFactory as Factory } from './factories/chat.factory';
-import { UserFactory } from 'src/domain/users/factories/users.factory';
-import { User } from 'src/domain/users/users.entity';
 
 describe('ChatsResolver', () => {
   let app: INestApplication;
@@ -35,15 +36,20 @@ describe('ChatsResolver', () => {
   });
 
   it('create', async () => {
-    await userFactory
-      .create()
-      .then((user: User) =>
-        resolver.create(user, { name: 'name', description: 'description' }),
-      )
-      .then(async (Chat) => {
-        expect(Chat.name).toBe('name');
-        expect(Chat.description).toBe('description');
-      });
+    await userFactory.create().then((user: User) =>
+      resolver
+        .create(user, { name: 'name', description: 'description' })
+        .then(async (entity: Entity) => {
+          expect(entity.name).toBe('name');
+          expect(entity.description).toBe('description');
+          await resolver
+            .findOne({
+              id: entity.id,
+            })
+            .then(async (loadedEntity: Entity) => await loadedEntity.creator)
+            .then((creator: User) => expect(creator.id).toBe(user.id));
+        }),
+    );
   });
 
   it('update', async () => {

@@ -9,6 +9,7 @@ import {
   Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
+import { Chat } from '../chats/chat/chat.entity';
 import { ChatUser } from '../chats/user/chat-user.entity';
 
 @Entity('users')
@@ -36,4 +37,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => ChatUser, (chatUser: ChatUser) => chatUser.user)
   chatUsers: Promise<ChatUser[]>;
+
+  @OneToMany(() => Chat, (chat) => chat.creator)
+  chatsCreator: Promise<Chat[]>;
 }
