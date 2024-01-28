@@ -10,7 +10,7 @@ import { Chat } from '../chat/chat.entity';
 import { User } from 'src/domain/users/users.entity';
 
 @Index(['chatId', 'userId'], { unique: true })
-@Entity('chat-user')
+@Entity('chat_user')
 export class ChatUser extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;

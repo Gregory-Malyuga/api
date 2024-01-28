@@ -1,0 +1,44 @@
+type ChatUser {
+  userId: Int!
+  chatId: Int!
+  roleId: Int!
+}
+
+input Filter {
+  userId: Int!
+  chatId: Int!
+  roleId: Int!
+}
+
+input Pagination {
+  offset: Int
+  limit: Int
+}
+
+type ChatUserIndex {
+  items: [ChatUser!]!
+  total: Int!
+}
+
+type Query {
+  chatUser(filter: Filter!): ChatUser
+  chatUsers(filter: Filter, pagination: Pagination): ChatUserIndex!
+}
+
+input ChatUserInputCreate {
+  userId: Int!
+  chatId: Int!
+  roleId: Int!
+}
+
+input ChatInputUpdate {
+  userId: Int
+  chatId: Int
+  roleId: Int
+}
+
+type Mutation {
+  chatUserCreate(dto: ChatInputCreate!): ChatUser
+  chatUserUpdate(dto: ChatInputUpdate!, filter: Filter!): ChatUser
+  chaUserDelete(filter: Filter!): Boolean
+}
