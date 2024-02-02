@@ -1,10 +1,14 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { hash } from 'bcrypt';
-import { AppModule } from 'src/app.module';
+import { DatabaseConfig } from 'src/app.module';
 import { UserFactory as Factory } from './factories/users.factory';
 import { UserRepository as Repository } from './users.repository';
 import { UsersResolver as Resolver } from './users.resolver';
+import { getTestModules } from 'src/test.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule as Module } from './users.module';
+import { User } from './users.entity';
 
 describe('UsersResolver', () => {
   let app: INestApplication;
@@ -14,7 +18,11 @@ describe('UsersResolver', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        ...getTestModules(),
+        TypeOrmModule.forRoot(DatabaseConfig),
+        Module,
+      ],
     }).compile();
 
     app = module.createNestApplication();
@@ -35,8 +43,10 @@ describe('UsersResolver', () => {
     await resolver
       .create({ login: 'login', password: 'password' })
       .then(async (model) => {
-        expect(model.login).toBe('login');
-        expect(model.password).toBe(await hash('password', model.salt));
+        await resolver.findOne({ id: model.id }).then(async (loaded: User) => {
+          expect(loaded.login).toBe('login');
+          expect(loaded.password).toBe(await hash('password', loaded.salt));
+        });
       });
   });
 

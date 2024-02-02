@@ -1,9 +1,12 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from 'src/app.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DatabaseConfig } from 'src/app.module';
 import { UserFactory } from 'src/domain/users/factories/users.factory';
 import { User } from 'src/domain/users/users.entity';
+import { getTestModules } from 'src/test.module';
 import { Chat as Entity } from './chat.entity';
+import { ChatModule as Module } from './chat.module';
 import { ChatRepository as Repository } from './chat.repository';
 import { ChatResolver as Resolver } from './chat.resolver';
 import { ChatFactory as Factory } from './factories/chat.factory';
@@ -17,7 +20,11 @@ describe('ChatsResolver', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        ...getTestModules(),
+        TypeOrmModule.forRoot(DatabaseConfig),
+        Module,
+      ],
     }).compile();
 
     app = module.createNestApplication();
