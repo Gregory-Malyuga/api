@@ -1,9 +1,7 @@
-./node_modules
-./dist
-.vscode/
-.env.example
-.eslintrc.js
-.gitignore
+node_modules
+dist
+docker
+.git
 .prettierignore
-.prettierrc
+.env.example
 README.md
