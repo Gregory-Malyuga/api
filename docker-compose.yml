@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: ./docker/node/Dockerfile
     volumes:
-      - ./src:/api/src
+      - ./src:/app/src
     ports:
       - 18088:${APP_PORT}
     command: npm run start:dev

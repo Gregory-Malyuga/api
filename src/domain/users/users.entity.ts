@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Chat } from '../chats/chat/chat.entity';
 import { ChatUser } from '../chats/user/chat-user.entity';
+import { Message } from '../chats/message/message.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -40,4 +41,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Chat, (chat) => chat.creator)
   chatsCreator: Promise<Chat[]>;
+
+  @OneToMany(() => Message, (message) => message.user)
+  messages: Promise<Message[]>;
 }
