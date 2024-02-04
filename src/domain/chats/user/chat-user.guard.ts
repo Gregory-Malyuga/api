@@ -1,13 +1,15 @@
 import { ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { AbstractGuard } from 'src/common/guards/abstract.guard';
-import { ChatUser as Entity } from './chat-user.entity';
+import { ChatUser, ChatUser as Entity } from './chat-user.entity';
 import { ChatUserRepository as Repository } from './chat-user.repository';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Reflector } from '@nestjs/core';
 import { Cache } from 'cache-manager';
 import { UserRepository } from 'src/domain/users/users.repository';
+import { Chat } from '../chat/chat.entity';
+import { ChatUserRoles as Roles } from './enum/chat-user.roles';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
-// Гвард разрешающий инвайтить только владельцу
 @Injectable()
 export class ChatUserGuard extends AbstractGuard<Entity> {
   constructor(
@@ -20,10 +22,19 @@ export class ChatUserGuard extends AbstractGuard<Entity> {
   }
 
   async specialCanActivate(context: ExecutionContext): Promise<boolean> {
-    return !!context;
-    // const gqlContext = GqlExecutionContext.create(context);
-    // return await this.repo
-    //   .findOneOrFailWithProcessWhere(gqlContext.getArgs().filter)
-    //   .then((model: Entity) => this.user.id === model.chat.owner.id);
+    const gqlContext = GqlExecutionContext.create(context);
+    return await this.repo
+      .findOneOrFailWithProcessWhere(gqlContext.getArgs().filter)
+      .then(async (model: Entity) => await model.chat)
+      .then(async (chat: Chat) => await this.checkPermission(chat));
   }
+
+  checkPermission = async (chat: Chat): Promise<boolean> =>
+    await chat.chatUsers
+      .then((chatUsers: ChatUser[]) =>
+        chatUsers.find(
+          (chatUser: ChatUser) => chatUser.userId === this.user.id,
+        ),
+      )
+      .then((chatUser: ChatUser) => chatUser.roleId === Roles.admin);
 }
