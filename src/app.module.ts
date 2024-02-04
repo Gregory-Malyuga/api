@@ -17,6 +17,7 @@ import { ChatUserModule } from './domain/chats/user/chat-user.module';
 import { User } from './domain/users/users.entity';
 import { UsersModule } from './domain/users/users.module';
 import { ChatUser } from './domain/chats/user/chat-user.entity';
+import { Message } from './domain/chats/message/message.entity';
 
 export const DatabaseConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -25,7 +26,7 @@ export const DatabaseConfig: TypeOrmModuleOptions = {
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, Chat, ChatUser],
+  entities: [User, Chat, ChatUser, Message],
   synchronize: true,
   autoLoadEntities: true,
 };
