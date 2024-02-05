@@ -1,7 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from 'src/app.module';
+import { DatabaseConfig } from 'src/app.module';
 import { ChatService as Service } from './chat.service';
+import { getTestModules } from '../../../test.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChatModule as Module } from './chat.module';
 
 describe('ChatService', () => {
   let app: INestApplication;
@@ -9,7 +12,11 @@ describe('ChatService', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        ...getTestModules(),
+        TypeOrmModule.forRoot(DatabaseConfig),
+        Module,
+      ],
     }).compile();
 
     app = module.createNestApplication();
@@ -22,5 +29,5 @@ describe('ChatService', () => {
     expect(service).toBeDefined();
   });
 
-  afterAll(async () => await app.close);
+  afterAll(async () => await app.close());
 });

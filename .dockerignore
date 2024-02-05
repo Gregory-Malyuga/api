@@ -2,6 +2,6 @@ node_modules
 dist
 docker
 .git
-.prettierignore
+.prettier*
 .env.example
 README.md
