@@ -12,6 +12,8 @@ export interface Filter {
     id?: Nullable<number[]>;
     name?: Nullable<string>;
     description?: Nullable<string>;
+    chatUserId?: Nullable<number[]>;
+    content?: Nullable<string>;
     userId: number;
     chatId: number;
     roleId: number;
@@ -35,6 +37,16 @@ export interface ChatInputUpdate {
     userId?: Nullable<number>;
     chatId?: Nullable<number>;
     roleId?: Nullable<number>;
+}
+
+export interface MessageInputCreate {
+    chatUserId: number;
+    content: string;
+}
+
+export interface MessageInputUpdate {
+    chatUserId?: Nullable<number>;
+    content?: Nullable<string>;
 }
 
 export interface ChatUserInputCreate {
@@ -61,6 +73,8 @@ export interface IQuery {
     singIn(login: string, password: string): Nullable<Token> | Promise<Nullable<Token>>;
     chat(filter: Filter): Nullable<Chat> | Promise<Nullable<Chat>>;
     chats(filter?: Nullable<Filter>, pagination?: Nullable<Pagination>): ChatIndex | Promise<ChatIndex>;
+    message(filter: Filter): Nullable<Message> | Promise<Nullable<Message>>;
+    messages(filter?: Nullable<Filter>, pagination?: Nullable<Pagination>): MessageIndex | Promise<MessageIndex>;
     chatUser(filter: Filter): Nullable<ChatUser> | Promise<Nullable<ChatUser>>;
     chatUsers(filter?: Nullable<Filter>, pagination?: Nullable<Pagination>): ChatUserIndex | Promise<ChatUserIndex>;
     user(filter: Filter): Nullable<User> | Promise<Nullable<User>>;
@@ -82,12 +96,26 @@ export interface IMutation {
     chatCreate(dto: ChatInputCreate): Nullable<Chat> | Promise<Nullable<Chat>>;
     chatUpdate(dto: ChatInputUpdate, filter: Filter): Nullable<Chat> | Promise<Nullable<Chat>>;
     chatDelete(filter: Filter): Nullable<boolean> | Promise<Nullable<boolean>>;
+    messageCreate(dto: MessageInputCreate): Nullable<Message> | Promise<Nullable<Message>>;
+    messageUpdate(dto: MessageInputUpdate, filter: Filter): Nullable<Message> | Promise<Nullable<Message>>;
+    messageDelete(filter: Filter): Nullable<boolean> | Promise<Nullable<boolean>>;
     chatUserCreate(dto: ChatInputCreate): Nullable<ChatUser> | Promise<Nullable<ChatUser>>;
     chatUserUpdate(dto: ChatInputUpdate, filter: Filter): Nullable<ChatUser> | Promise<Nullable<ChatUser>>;
     chaUserDelete(filter: Filter): Nullable<boolean> | Promise<Nullable<boolean>>;
     userCreate(dto: UserInputCreate): Nullable<User> | Promise<Nullable<User>>;
     userUpdate(dto: UserInputUpdate, filter: Filter): Nullable<User> | Promise<Nullable<User>>;
     userDelete(filter: Filter): Nullable<boolean> | Promise<Nullable<boolean>>;
+}
+
+export interface Message {
+    id: number;
+    chatUserId: number;
+    content: string;
+}
+
+export interface MessageIndex {
+    items: Message[];
+    total: number;
 }
 
 export interface ChatUser {

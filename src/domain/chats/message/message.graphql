@@ -1,0 +1,42 @@
+type Message {
+  id: Int!
+  chatUserId: Int!
+  content: String!
+}
+
+input Filter {
+  id: [Int!]
+  chatUserId: [Int!]
+  content: String
+}
+
+input Pagination {
+  offset: Int
+  limit: Int
+}
+
+type MessageIndex {
+  items: [Message!]!
+  total: Int!
+}
+
+type Query {
+  message(filter: Filter!): Message
+  messages(filter: Filter, pagination: Pagination): MessageIndex!
+}
+
+input MessageInputCreate {
+  chatUserId: Int!
+  content: String!
+}
+
+input MessageInputUpdate {
+  chatUserId: Int
+  content: String
+}
+
+type Mutation {
+  messageCreate(dto: MessageInputCreate!): Message
+  messageUpdate(dto: MessageInputUpdate!, filter: Filter!): Message
+  messageDelete(filter: Filter!): Boolean
+}
