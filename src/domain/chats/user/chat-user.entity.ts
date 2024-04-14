@@ -1,13 +1,15 @@
+import { User } from 'src/domain/users/users.entity';
 import {
   BaseEntity,
   Column,
   Entity,
   Index,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Chat } from '../chat/chat.entity';
-import { User } from 'src/domain/users/users.entity';
+import { Message } from '../message/message.entity';
 
 @Index(['chatId', 'userId'], { unique: true })
 @Entity('chat_user')
@@ -36,4 +38,7 @@ export class ChatUser extends BaseEntity {
     createForeignKeyConstraints: false,
   })
   user: Promise<User>;
+
+  @OneToMany(() => Message, (message) => message.chatUser)
+  messages: Promise<Message[]>;
 }

@@ -10,8 +10,7 @@ import {
   Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
-import { Chat } from 'src/domain/chats/chat/chat.entity';
-import { User } from 'src/domain/users/users.entity';
+import { ChatUser } from '../user/chat-user.entity';
 
 @Entity('messages')
 export class Message extends BaseEntity {
@@ -20,11 +19,7 @@ export class Message extends BaseEntity {
 
   @Index()
   @Column()
-  userId!: number;
-
-  @Index()
-  @Column()
-  chatId!: number;
+  chatUserId!: number;
 
   @Index()
   @Column({ length: 2000 })
@@ -39,13 +34,8 @@ export class Message extends BaseEntity {
   @DeleteDateColumn()
   deletedAt!: Timestamp;
 
-  @ManyToOne(() => Chat, (chat: Chat) => chat.messages, {
+  @ManyToOne(() => ChatUser, (chatUser: ChatUser) => chatUser.messages, {
     createForeignKeyConstraints: false,
   })
-  chat: Promise<Chat>;
-
-  @ManyToOne(() => User, (user: User) => user.messages, {
-    createForeignKeyConstraints: false,
-  })
-  user: Promise<User>;
+  chatUser: Promise<ChatUser>;
 }

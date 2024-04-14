@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 import { Chat } from '../chats/chat/chat.entity';
 import { ChatUser } from '../chats/user/chat-user.entity';
-import { Message } from '../chats/message/message.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -36,12 +35,9 @@ export class User extends BaseEntity {
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt!: Timestamp;
 
-  @OneToMany(() => ChatUser, (chatUser: ChatUser) => chatUser.user)
-  chatUsers: Promise<ChatUser[]>;
-
   @OneToMany(() => Chat, (chat) => chat.creator)
   chatsCreator: Promise<Chat[]>;
 
-  @OneToMany(() => Message, (message) => message.user)
-  messages: Promise<Message[]>;
+  @OneToMany(() => ChatUser, (chatUser: ChatUser) => chatUser.user)
+  chatUsers: Promise<ChatUser[]>;
 }
